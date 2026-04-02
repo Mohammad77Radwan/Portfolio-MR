@@ -40,39 +40,48 @@ export function Newsletter() {
             directement dans votre boîte mail.
           </p>
 
-          {subscribed ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center justify-center gap-3 bg-white/20 backdrop-blur-md rounded-lg p-4 border border-white/30"
-            >
-              <CheckCircle className="w-5 h-5 text-green-300" />
-              <span className="text-white font-semibold">
-                Merci pour votre abonnement!
-              </span>
-            </motion.div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex gap-2 max-w-md mx-auto">
-              <div className="flex-1 relative">
-                <Mail className="absolute left-4 top-3.5 w-5 h-5 text-slate-400 pointer-events-none" />
-                <input
-                  type="email"
-                  placeholder="Votre email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full pl-12 pr-4 py-3 rounded-lg bg-white/20 backdrop-blur-md border border-white/30 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? "..." : "S'abonner"}
-              </button>
-            </form>
-          )}
+          <div className="relative mx-auto max-w-lg overflow-hidden rounded-xl p-px">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-[120%] animate-[spin_6s_linear_infinite] bg-[conic-gradient(from_0deg,rgba(255,255,255,0.9),rgba(147,197,253,0.9),rgba(216,180,254,0.9),rgba(255,255,255,0.9))]"
+            />
+
+            <div className="relative rounded-[11px] bg-white/12 backdrop-blur-md border border-white/25 p-3 md:p-4">
+              {subscribed ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex items-center justify-center gap-3 rounded-lg p-4"
+                >
+                  <CheckCircle className="w-5 h-5 text-green-300" />
+                  <span className="text-white font-semibold">
+                    Merci pour votre abonnement!
+                  </span>
+                </motion.div>
+              ) : (
+                <form onSubmit={handleSubmit} className="flex gap-2 max-w-md mx-auto">
+                  <div className="flex-1 relative">
+                    <Mail className="absolute left-4 top-3.5 w-5 h-5 text-slate-400 pointer-events-none" />
+                    <input
+                      type="email"
+                      placeholder="Votre email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="w-full pl-12 pr-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loading ? "..." : "S'abonner"}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

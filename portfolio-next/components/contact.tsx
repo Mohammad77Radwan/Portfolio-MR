@@ -122,81 +122,88 @@ export function Contact() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="bg-white dark:bg-slate-800 rounded-lg p-8"
+          className="relative overflow-hidden rounded-xl p-px"
         >
-          <h3 className="text-2xl font-bold mb-6">Envoyez-moi un message</h3>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-[120%] animate-[spin_7s_linear_infinite] bg-[conic-gradient(from_0deg,rgba(14,165,233,0.9),rgba(168,85,247,0.85),rgba(236,72,153,0.85),rgba(14,165,233,0.9))]"
+          />
 
-          {state.message && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`mb-6 p-4 rounded-lg border ${
-                state.ok
-                  ? "bg-green-100 text-green-700 border-green-300 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700"
-                  : "bg-red-100 text-red-700 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700"
-              }`}
-            >
-              {state.ok ? "✓ " : "⚠ "}
-              {state.message}
-            </motion.div>
-          )}
+          <div className="relative rounded-[11px] bg-white dark:bg-slate-800 p-8">
+            <h3 className="text-2xl font-bold mb-6">Envoyez-moi un message</h3>
 
-          <form id="contact-form" action={formAction} className="space-y-6">
-            <input
-              type="text"
-              name="website"
-              tabIndex={-1}
-              autoComplete="off"
-              className="hidden"
-              aria-hidden="true"
-            />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {state.message && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`mb-6 p-4 rounded-lg border ${
+                  state.ok
+                    ? "bg-green-100 text-green-700 border-green-300 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700"
+                    : "bg-red-100 text-red-700 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700"
+                }`}
+              >
+                {state.ok ? "✓ " : "⚠ "}
+                {state.message}
+              </motion.div>
+            )}
+
+            <form id="contact-form" action={formAction} className="space-y-6">
               <input
                 type="text"
-                name="name"
-                placeholder="Votre nom"
-                required
-                className="px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
               />
-              {state.fieldErrors?.name && (
-                <p className="text-sm text-red-600 dark:text-red-400 -mt-4 md:col-span-2">{state.fieldErrors.name}</p>
-              )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Votre nom"
+                  required
+                  className="px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {state.fieldErrors?.name && (
+                  <p className="text-sm text-red-600 dark:text-red-400 -mt-4 md:col-span-2">{state.fieldErrors.name}</p>
+                )}
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Votre email"
+                  required
+                  className="px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {state.fieldErrors?.email && (
+                  <p className="text-sm text-red-600 dark:text-red-400 -mt-4 md:col-span-2">{state.fieldErrors.email}</p>
+                )}
+              </div>
+
               <input
-                type="email"
-                name="email"
-                placeholder="Votre email"
+                type="text"
+                name="subject"
+                placeholder="Sujet"
                 required
-                className="px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              {state.fieldErrors?.email && (
-                <p className="text-sm text-red-600 dark:text-red-400 -mt-4 md:col-span-2">{state.fieldErrors.email}</p>
+              {state.fieldErrors?.subject && (
+                <p className="text-sm text-red-600 dark:text-red-400 -mt-4">{state.fieldErrors.subject}</p>
               )}
-            </div>
 
-            <input
-              type="text"
-              name="subject"
-              placeholder="Sujet"
-              required
-              className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {state.fieldErrors?.subject && (
-              <p className="text-sm text-red-600 dark:text-red-400 -mt-4">{state.fieldErrors.subject}</p>
-            )}
+              <textarea
+                name="message"
+                placeholder="Votre message"
+                required
+                rows={6}
+                className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              ></textarea>
+              {state.fieldErrors?.message && (
+                <p className="text-sm text-red-600 dark:text-red-400 -mt-4">{state.fieldErrors.message}</p>
+              )}
 
-            <textarea
-              name="message"
-              placeholder="Votre message"
-              required
-              rows={6}
-              className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            ></textarea>
-            {state.fieldErrors?.message && (
-              <p className="text-sm text-red-600 dark:text-red-400 -mt-4">{state.fieldErrors.message}</p>
-            )}
-
-            <SubmitButton />
-          </form>
+              <SubmitButton />
+            </form>
+          </div>
         </motion.div>
       </div>
     </section>

@@ -5,6 +5,7 @@ import { MagneticButton } from "./magnetic-button";
 import { GlassCard } from "./glass-card";
 import { AuroraBackground } from "./aurora-background";
 import { ChevronDown } from "lucide-react";
+import { useScrambleText } from "@/hooks/use-scramble-text";
 
 /**
  * HeroAdvanced Component
@@ -27,14 +28,10 @@ export function HeroAdvanced() {
     "Mohammad Radwan",
   ];
 
-  const subtitleText = [
-    "Développeur",
-    "Full-Stack",
-    "Créateur",
-    "d'Expériences",
-    "Web",
-    "Exceptionnelles",
-  ];
+  const roleText = useScrambleText("Développeur Web Full-Stack", {
+    duration: 1000,
+    fps: 36,
+  });
 
   // Variants pour les animations
   const containerVariants = {
@@ -115,16 +112,13 @@ export function HeroAdvanced() {
             variants={containerVariants}
             className="mb-8 h-12 md:h-16"
           >
-            <div className="text-xl md:text-3xl font-semibold text-slate-700 dark:text-slate-300 flex flex-wrap justify-center gap-2">
-              {subtitleText.map((word, i) => (
-                <motion.span
-                  key={i}
-                  variants={wordVariants}
-                  className="inline-block"
-                >
-                  {word}
-                </motion.span>
-              ))}
+            <div className="text-xl md:text-3xl font-semibold text-slate-700 dark:text-slate-300 flex flex-col items-center gap-2">
+              <motion.span variants={wordVariants} className="inline-block tracking-wide tabular-nums">
+                {roleText}
+              </motion.span>
+              <motion.span variants={wordVariants} className="inline-block text-base md:text-xl text-slate-600 dark:text-slate-400">
+                Créateur d&apos;Expériences Web Exceptionnelles
+              </motion.span>
             </div>
           </motion.div>
 

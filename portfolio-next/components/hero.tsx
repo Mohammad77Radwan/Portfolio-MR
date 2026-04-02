@@ -3,8 +3,14 @@
 import { motion } from "framer-motion";
 import { ChevronDown, GitBranch, Share2, Mail } from "lucide-react";
 import Link from "next/link";
+import { useScrambleText } from "@/hooks/use-scramble-text";
 
 export function Hero() {
+  const roleText = useScrambleText("Développeur Web Full-Stack & Designer UX/UI", {
+    duration: 1000,
+    fps: 36,
+  });
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -64,7 +70,7 @@ export function Hero() {
           variants={itemVariants}
           className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-4"
         >
-          Développeur Web Full-Stack & Designer UX/UI
+          {roleText}
         </motion.p>
 
         {/* Description */}
