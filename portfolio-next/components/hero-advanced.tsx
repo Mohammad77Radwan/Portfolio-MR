@@ -1,0 +1,230 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { MagneticButton } from "./magnetic-button";
+import { GlassCard } from "./glass-card";
+import { AuroraBackground } from "./aurora-background";
+import { ChevronDown } from "lucide-react";
+
+/**
+ * HeroAdvanced Component
+ * Hero époustouflante avec:
+ * - Aurora background animé
+ * - Text Reveal animation mot par mot
+ * - Glassmorphism cards
+ * - Magnetic buttons
+ * - Parallax scroll effect
+ *
+ * Démontre la maîtrise de :
+ * - Framer Motion (animations complexes)
+ * - Tailwind CSS (design moderne)
+ * - Micro-interactions (hover effects)
+ * - UX/UI advanced (glassmorphism, aurora)
+ */
+export function HeroAdvanced() {
+  // Texte principal à révéler mot par mot
+  const mainText = [
+    "Mohammad Radwan",
+  ];
+
+  const subtitleText = [
+    "Développeur",
+    "Full-Stack",
+    "Créateur",
+    "d'Expériences",
+    "Web",
+    "Exceptionnelles",
+  ];
+
+  // Variants pour les animations
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const wordVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const slideUp = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  return (
+    <section className="relative min-h-screen flex items-center justify-center px-4 pt-20 overflow-hidden">
+      {/* Aurora Background */}
+      <AuroraBackground />
+
+      {/* Contenu */}
+      <div className="relative z-10 max-w-5xl mx-auto">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+          className="text-center"
+        >
+          {/* Badge */}
+          <motion.div variants={wordVariants} className="mb-8 inline-block">
+            <GlassCard hoverable={false}>
+              <p className="text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+                🎓 BTS SIO SLAM 2ème année • Candidat Licence/Bachelor 2026
+              </p>
+            </GlassCard>
+          </motion.div>
+
+          {/* Titre principal avec Text Reveal */}
+          <motion.h1
+            variants={containerVariants}
+            className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight"
+          >
+            {mainText[0].split(" ").map((word, i) => (
+              <motion.span
+                key={i}
+                variants={wordVariants}
+                className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 mr-3"
+              >
+                {word}
+              </motion.span>
+            ))}
+          </motion.h1>
+
+          {/* Sous-titre avec animation en parallèle */}
+          <motion.div
+            variants={containerVariants}
+            className="mb-8 h-12 md:h-16"
+          >
+            <div className="text-xl md:text-3xl font-semibold text-slate-700 dark:text-slate-300 flex flex-wrap justify-center gap-2">
+              {subtitleText.map((word, i) => (
+                <motion.span
+                  key={i}
+                  variants={wordVariants}
+                  className="inline-block"
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Description */}
+          <motion.p
+            variants={slideUp}
+            className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed"
+          >
+            Étudiant en BTS SIO spécialisé en SLAM (Développement Applicatif).
+            Je construis des applications web modernes, performantes et accessibles.
+            Passionné par Next.js, React, et les pratiques de conception user-centric.
+          </motion.p>
+
+          {/* Stats Cards avec Glassmorphism */}
+          <motion.div
+            variants={containerVariants}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-12"
+          >
+            {[
+              { number: "5+", label: "Projets" },
+              { number: "15+", label: "Technologies" },
+              { number: "2+", label: "Ans d'Expérience" },
+            ].map((stat, i) => (
+              <motion.div key={i} variants={wordVariants}>
+                <GlassCard hoverable>
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent mb-2">
+                      {stat.number}
+                    </div>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm">
+                      {stat.label}
+                    </p>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* CTA Buttons avec Magnetic Effect */}
+          <motion.div
+            variants={slideUp}
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+          >
+            <MagneticButton variant="primary" href="#projects" ariaLabel="Aller à la section projets">
+              Voir mes projets
+            </MagneticButton>
+            <MagneticButton variant="secondary" href="#contact" ariaLabel="Aller à la section contact">
+              Me contacter
+            </MagneticButton>
+          </motion.div>
+
+          {/* Social Links */}
+          <motion.div
+            variants={slideUp}
+            className="flex gap-4 justify-center"
+          >
+            {[
+              {
+                name: "GitHub",
+                url: "https://github.com/Mohammad77Radwan",
+              },
+              {
+                name: "LinkedIn",
+                url: "https://linkedin.com/in/mohammad-radwan",
+              },
+              { name: "Email", url: "mailto:mohammadradwn804@gmail.com" },
+            ].map((social) => (
+              <motion.a
+                key={social.name}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label={`Ouvrir ${social.name}`}
+                className="interactive p-3 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
+              >
+                <span className="text-sm font-medium">{social.name}</span>
+              </motion.a>
+            ))}
+          </motion.div>
+        </motion.div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="flex justify-center mt-16"
+        >
+          <div
+            aria-hidden="true"
+            className="interactive p-2 rounded-full border border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+          >
+            <ChevronDown className="w-6 h-6 text-slate-400 dark:text-slate-600" />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Glow effects à basEn */}
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-to-t from-blue-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+    </section>
+  );
+}
