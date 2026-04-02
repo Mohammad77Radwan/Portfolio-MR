@@ -6,6 +6,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ReadingProgress } from "@/components/reading-progress";
 import { CommandTerminal } from "@/components/command-terminal";
+import { BackToTop } from "@/components/back-to-top";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -85,6 +86,7 @@ export default function RootLayout({
         <ReadingProgress />
         <CommandTerminal />
         <Navbar />
+        <BackToTop />
         <main className="flex-1">
           {children}
         </main>

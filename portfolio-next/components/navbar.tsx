@@ -2,21 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, Moon, Sun } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDark, setIsDark] = useState(() =>
-    typeof window !== "undefined"
-      ? document.documentElement.classList.contains("dark")
-      : false,
-  );
-
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle("dark");
-    setIsDark(!isDark);
-    localStorage.theme = isDark ? "light" : "dark";
-  };
 
   const navItems = [
     { label: "Accueil", href: "#" },
@@ -57,19 +46,6 @@ export function Navbar() {
 
           {/* Right Side */}
           <div className="flex items-center gap-4">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="min-h-11 min-w-11 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              aria-label="Changer le thème"
-            >
-                {isDark ? (
-                <Sun className="w-5 h-5 text-yellow-500" />
-              ) : (
-                <Moon className="w-5 h-5 text-slate-600" />
-              )}
-            </button>
-
             {/* Mobile Menu Button */}
             <button
               type="button"
