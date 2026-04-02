@@ -126,7 +126,7 @@ export function Contact() {
         >
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-[120%] animate-[spin_7s_linear_infinite] bg-[conic-gradient(from_0deg,rgba(14,165,233,0.9),rgba(168,85,247,0.85),rgba(236,72,153,0.85),rgba(14,165,233,0.9))]"
+            className="pointer-events-none absolute inset-0 animate-[spin_7s_linear_infinite] bg-[conic-gradient(from_0deg,rgba(14,165,233,0.95),rgba(168,85,247,0.9),rgba(236,72,153,0.9),rgba(14,165,233,0.95))]"
           />
 
           <div className="relative rounded-[11px] bg-white dark:bg-slate-800 p-8">

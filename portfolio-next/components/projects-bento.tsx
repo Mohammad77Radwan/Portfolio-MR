@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from "framer-motion";
+import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useMemo, useRef, useState } from "react";
 import { projects } from "@/lib/data";
 import type { Project } from "@/types";
@@ -96,6 +96,7 @@ export function ProjectsBento() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [selected, setSelected] = useState<Project | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -125,9 +126,8 @@ export function ProjectsBento() {
     <section ref={sectionRef} id="projects" className="relative min-h-[185vh] px-4 bg-slate-50 dark:bg-slate-900/50 overflow-x-clip">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          aria-hidden="true"
-          style={{ opacity: titleOpacity, y: titleY }}
-          className="pointer-events-none sticky top-1/2 z-10 -translate-y-1/2 py-10"
+          style={prefersReducedMotion ? undefined : { opacity: titleOpacity, y: titleY }}
+          className="pointer-events-none sticky top-24 md:top-1/2 z-10 md:-translate-y-1/2 py-10"
         >
           <h2 className="text-4xl font-bold mb-4">Projets Réalisés - Bento Showcase</h2>
           <p className="max-w-2xl text-slate-600 dark:text-slate-300 text-base md:text-lg">
@@ -135,7 +135,10 @@ export function ProjectsBento() {
           </p>
         </motion.div>
 
-        <motion.div style={{ opacity: cardsOpacity, y: cardsY, scale: cardsScale }} className="relative z-20 pt-[55vh] pb-24">
+        <motion.div
+          style={prefersReducedMotion ? undefined : { opacity: cardsOpacity, y: cardsY, scale: cardsScale }}
+          className="relative z-20 pt-[36vh] md:pt-[55vh] pb-24"
+        >
           <div className="mb-8 grid gap-4 md:grid-cols-[1fr_auto]">
             <input
               value={query}

@@ -43,7 +43,7 @@ export function Newsletter() {
           <div className="relative mx-auto max-w-lg overflow-hidden rounded-xl p-px">
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute -inset-[120%] animate-[spin_6s_linear_infinite] bg-[conic-gradient(from_0deg,rgba(255,255,255,0.9),rgba(147,197,253,0.9),rgba(216,180,254,0.9),rgba(255,255,255,0.9))]"
+              className="pointer-events-none absolute inset-0 animate-[spin_6s_linear_infinite] bg-[conic-gradient(from_0deg,rgba(255,255,255,0.95),rgba(147,197,253,0.95),rgba(216,180,254,0.95),rgba(255,255,255,0.95))]"
             />
 
             <div className="relative rounded-[11px] bg-white/12 backdrop-blur-md border border-white/25 p-3 md:p-4">
