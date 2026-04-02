@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { useMemo, useRef, useState } from "react";
+import { motion, useMotionTemplate, useMotionValue, useTransform } from "framer-motion";
+import { useMemo, useState } from "react";
 import { projects } from "@/lib/data";
 import type { Project } from "@/types";
 import { ProjectModal } from "./project-modal";
@@ -95,19 +95,6 @@ export function ProjectsBento() {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [selected, setSelected] = useState<Project | null>(null);
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const prefersReducedMotion = useReducedMotion();
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const titleOpacity = useTransform(scrollYProgress, [0.05, 0.2, 0.58, 0.75], [0, 1, 1, 0]);
-  const titleY = useTransform(scrollYProgress, [0.1, 0.42, 0.75], [50, 0, -64]);
-  const cardsOpacity = useTransform(scrollYProgress, [0.18, 0.34, 0.9], [0, 1, 1]);
-  const cardsY = useTransform(scrollYProgress, [0.18, 0.78], [120, -44]);
-  const cardsScale = useTransform(scrollYProgress, [0.18, 0.34], [0.9, 1]);
 
   const categories = useMemo(
     () => ["all", ...Array.from(new Set(projects.map((p) => p.category)))],
@@ -123,22 +110,16 @@ export function ProjectsBento() {
   const [first, ...rest] = filtered;
 
   return (
-    <section ref={sectionRef} id="projects" className="relative min-h-[185vh] px-4 bg-slate-50 dark:bg-slate-900/50 overflow-x-clip">
+    <section id="projects" className="py-20 px-4 bg-slate-50 dark:bg-slate-900/50 overflow-x-clip">
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          style={prefersReducedMotion ? undefined : { opacity: titleOpacity, y: titleY }}
-          className="pointer-events-none sticky top-24 md:top-1/2 z-10 md:-translate-y-1/2 py-10"
-        >
+        <div className="mb-10">
           <h2 className="text-4xl font-bold mb-4">Projets Réalisés - Bento Showcase</h2>
           <p className="max-w-2xl text-slate-600 dark:text-slate-300 text-base md:text-lg">
             Chaque projet est présenté comme une mini case-study interactive pour montrer l&apos;impact, les choix d&apos;architecture et la valeur métier.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          style={prefersReducedMotion ? undefined : { opacity: cardsOpacity, y: cardsY, scale: cardsScale }}
-          className="relative z-20 pt-[36vh] md:pt-[55vh] pb-24"
-        >
+        <div className="relative z-20">
           <div className="mb-8 grid gap-4 md:grid-cols-[1fr_auto]">
             <input
               value={query}
@@ -176,7 +157,7 @@ export function ProjectsBento() {
               ))}
             </div>
           )}
-        </motion.div>
+        </div>
       </div>
 
       <ProjectModal project={selected} onClose={() => setSelected(null)} />
