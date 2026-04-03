@@ -24,7 +24,7 @@ export function Testimonials() {
   };
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/10 dark:to-purple-900/10">
+    <section className="relative py-20 px-4">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

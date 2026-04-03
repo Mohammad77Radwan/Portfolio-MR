@@ -6,7 +6,7 @@ import { AnimatedCounter } from "./animated-counter";
 const stats = [
   {
     label: "Projets Réalisés",
-    value: 5,
+    value: 20,
     suffix: "+",
     icon: "🚀",
   },
@@ -50,7 +50,7 @@ export function Stats() {
   };
 
   return (
-    <section className="py-16 px-4 bg-white dark:bg-slate-800">
+    <section className="relative py-16 px-4">
       <div className="max-w-6xl mx-auto">
         <motion.div
           variants={containerVariants}
@@ -63,7 +63,7 @@ export function Stats() {
             <motion.div
               key={index}
               variants={itemVariants}
-              className="text-center p-6 rounded-lg bg-slate-50 dark:bg-slate-900 hover:shadow-lg transition-shadow"
+              className="text-center p-6 rounded-lg border border-white/15 bg-white/70 dark:bg-slate-900/60 backdrop-blur-md hover:shadow-lg transition-shadow"
             >
               <div className="text-4xl mb-4">{stat.icon}</div>
               <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">

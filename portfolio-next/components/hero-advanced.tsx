@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { MagneticButton } from "./magnetic-button";
 import { GlassCard } from "./glass-card";
 import { AuroraBackground } from "./aurora-background";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Download } from "lucide-react";
 import { useScrambleText } from "@/hooks/use-scramble-text";
 
 /**
@@ -138,7 +138,7 @@ export function HeroAdvanced() {
             className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-12"
           >
             {[
-              { number: "5+", label: "Projets" },
+              { number: "20+", label: "Projets" },
               { number: "15+", label: "Technologies" },
               { number: "2+", label: "Ans d'Expérience" },
             ].map((stat, i) => (
@@ -168,6 +168,14 @@ export function HeroAdvanced() {
             <MagneticButton variant="secondary" href="#contact" ariaLabel="Aller à la section contact">
               Me contacter
             </MagneticButton>
+            <a
+              href="/documents/cv-mohammad-radwan.txt"
+              download
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-cyan-300/40 bg-cyan-400/10 px-8 py-4 font-semibold text-cyan-200 transition-all hover:bg-cyan-400/20 hover:shadow-lg hover:shadow-cyan-500/30"
+            >
+              <Download className="h-4 w-4" />
+              Télécharger mon CV
+            </a>
           </motion.div>
 
           {/* Social Links */}

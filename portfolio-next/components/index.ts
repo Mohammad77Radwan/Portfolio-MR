@@ -19,3 +19,4 @@ export { GlassCard } from "./glass-card";
 export { AuroraBackground } from "./aurora-background";
 export { ReadingProgress } from "./reading-progress";
 export { CommandTerminal } from "./command-terminal";
+export { NebulaBackdrop } from "./nebula-backdrop";

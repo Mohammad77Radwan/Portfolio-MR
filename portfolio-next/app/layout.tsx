@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CustomCursor } from "@/components";
+import { NebulaBackdrop } from "@/components";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ReadingProgress } from "@/components/reading-progress";
@@ -81,13 +82,14 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-white dark:bg-slate-950 text-slate-950 dark:text-slate-50 transition-colors">
+      <body className="relative min-h-full flex flex-col bg-slate-950 text-slate-50 transition-colors">
+        <NebulaBackdrop />
         <CustomCursor />
         <ReadingProgress />
         <CommandTerminal />
         <Navbar />
         <BackToTop />
-        <main className="flex-1">
+        <main className="relative z-10 flex-1">
           {children}
         </main>
         <Footer />

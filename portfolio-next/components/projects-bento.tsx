@@ -10,7 +10,7 @@ import { ProjectModal } from "./project-modal";
 const BLUR =
   "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PScxMic+PHJlY3Qgd2lkdGg9JzE2JyBoZWlnaHQ9JzEyJyBmaWxsPScjMTQyMjM3Jy8+PC9zdmc+";
 
-function TiltCard({ project, onOpen, featured = false }: { project: Project; onOpen: (p: Project) => void; featured?: boolean }) {
+function TiltCard({ project, onOpen, featured = false, index = 0 }: { project: Project; onOpen: (p: Project) => void; featured?: boolean; index?: number }) {
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const pointerX = useMotionValue(120);
@@ -20,6 +20,7 @@ function TiltCard({ project, onOpen, featured = false }: { project: Project; onO
   const rotateY = useTransform(mx, [-0.5, 0.5], [-9, 9]);
   const spotlight = useMotionTemplate`radial-gradient(260px circle at ${pointerX}px ${pointerY}px, rgba(56, 189, 248, 0.18), transparent 72%)`;
   const borderGlow = useMotionTemplate`radial-gradient(170px circle at ${pointerX}px ${pointerY}px, rgba(255, 255, 255, 0.9), transparent 72%)`;
+  const isUnderDevelopment = project.id === "collaborative-node-editor";
 
   return (
     <motion.button
@@ -41,7 +42,13 @@ function TiltCard({ project, onOpen, featured = false }: { project: Project; onO
       }}
       onClick={() => onOpen(project)}
       style={{ rotateX, rotateY, transformPerspective: 900 }}
-      className={`group relative flex h-full min-h-[18rem] flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white text-left shadow-sm transition-all hover:shadow-2xl dark:border-slate-700/80 dark:bg-slate-900 ${featured ? "md:col-span-2 md:row-span-2 md:min-h-[30rem]" : ""}`}
+      initial={{ opacity: 0, y: 24, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ duration: 0.6, delay: index * 0.07, ease: "easeOut" }}
+      whileHover={{ y: -10, scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
+      className={`group relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white text-left shadow-sm transition-all hover:shadow-2xl dark:border-slate-700/80 dark:bg-slate-900 ${featured ? "md:col-span-2 md:row-span-2" : ""}`}
     >
       {/* Border glow only near cursor */}
       <motion.div
@@ -59,17 +66,23 @@ function TiltCard({ project, onOpen, featured = false }: { project: Project; onO
         style={{ backgroundImage: spotlight, opacity: glowOpacity }}
       />
 
-      <div className={`relative w-full ${featured ? "h-72 md:flex-1" : "h-52"}`}>
+      <div className={`relative w-full ${featured ? "h-64 md:h-[65%]" : "h-44"}`}>
         <Image
           src={project.image}
           alt={project.title}
           fill
           sizes={featured ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
           placeholder="blur"
           blurDataURL={BLUR}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/20 to-transparent" />
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-16 right-8 h-40 w-40 rounded-full border border-cyan-300/20"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 16, ease: "linear", repeat: Infinity }}
+        />
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5 text-slate-900 dark:text-white">
         <div className="flex flex-wrap gap-2">
@@ -79,6 +92,15 @@ function TiltCard({ project, onOpen, featured = false }: { project: Project; onO
               {block}
             </span>
           ))}
+          {isUnderDevelopment && (
+            <motion.span
+              className="rounded-full bg-amber-400/20 px-2.5 py-1 text-[11px] font-semibold text-amber-700 backdrop-blur dark:text-amber-300"
+              animate={{ opacity: [0.7, 1, 0.7], scale: [1, 1.04, 1] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            >
+              En Développement
+            </motion.span>
+          )}
         </div>
         <div className="mt-auto">
           <h3 className="text-xl font-bold leading-tight">{project.title}</h3>
@@ -97,12 +119,25 @@ export function ProjectsBento() {
   const [selected, setSelected] = useState<Project | null>(null);
 
   const categories = useMemo(
-    () => ["all", ...Array.from(new Set(projects.map((p) => p.category)))],
+    () => ["all", "fullstack", "ia", "systems", "ecommerce", "pwa"],
     [],
   );
 
+  const categoryLabel = (category: string) => {
+    if (category === "all") return "Tous";
+    if (category === "ia") return "IA";
+    if (category === "fullstack") return "Full-Stack";
+    if (category === "systems") return "Systèmes";
+    if (category === "ecommerce") return "E-commerce";
+    if (category === "pwa") return "PWA";
+    return category.toUpperCase();
+  };
+
   const filtered = projects.filter((project) => {
-    const categoryMatch = activeCategory === "all" || project.category === activeCategory;
+    const categoryMatch =
+      activeCategory === "all" ||
+      project.category === activeCategory ||
+      (project.categories ?? []).includes(activeCategory);
     const queryMatch = `${project.title} ${project.description}`.toLowerCase().includes(query.toLowerCase());
     return categoryMatch && queryMatch;
   });
@@ -110,11 +145,13 @@ export function ProjectsBento() {
   const [first, ...rest] = filtered;
 
   return (
-    <section id="projects" className="py-20 px-4 bg-slate-50 dark:bg-slate-900/50 overflow-x-clip">
+    <section id="projects" className="relative isolate px-4 py-24">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-10">
-          <h2 className="text-4xl font-bold mb-4">Projets Réalisés - Bento Showcase</h2>
-          <p className="max-w-2xl text-slate-600 dark:text-slate-300 text-base md:text-lg">
+        <div className="mb-10 relative z-10">
+          <h2 className="mb-4 bg-gradient-to-r from-cyan-200 via-blue-200 to-fuchsia-200 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
+            Projets Réalisés - Bento Showcase
+          </h2>
+          <p className="max-w-2xl text-slate-200 text-base md:text-lg">
             Chaque projet est présenté comme une mini case-study interactive pour montrer l&apos;impact, les choix d&apos;architecture et la valeur métier.
           </p>
         </div>
@@ -125,7 +162,7 @@ export function ProjectsBento() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Recherche projet, technologie, impact..."
-              className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none ring-blue-500/40 placeholder:text-slate-500 focus:ring-4 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+              className="rounded-xl border border-cyan-300/30 bg-slate-900/70 px-4 py-3 text-slate-100 outline-none ring-cyan-400/40 placeholder:text-slate-400 focus:ring-4"
             />
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
@@ -135,11 +172,11 @@ export function ProjectsBento() {
                   onClick={() => setActiveCategory(category)}
                   className={`min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition ${
                     activeCategory === category
-                      ? "bg-blue-600 text-white"
-                      : "bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+                      ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-[0_0_30px_rgba(14,165,233,0.35)]"
+                      : "bg-slate-800/80 text-slate-300 hover:bg-slate-700"
                   }`}
                 >
-                  {category === "all" ? "Tous" : category.toUpperCase()}
+                  {categoryLabel(category)}
                 </button>
               ))}
             </div>
@@ -150,10 +187,10 @@ export function ProjectsBento() {
               Aucun projet ne correspond à ce filtre.
             </p>
           ) : (
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-4 auto-rows-[180px]">
-              {first && <TiltCard project={first} onOpen={setSelected} featured />}
-              {rest.map((project) => (
-                <TiltCard key={project.id} project={project} onOpen={setSelected} />
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-4 md:auto-rows-[220px]">
+              {first && <TiltCard project={first} onOpen={setSelected} featured index={0} />}
+              {rest.map((project, index) => (
+                <TiltCard key={project.id} project={project} onOpen={setSelected} index={index + 1} />
               ))}
             </div>
           )}

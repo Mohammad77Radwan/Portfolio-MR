@@ -25,8 +25,8 @@ export function Newsletter() {
   };
 
   return (
-    <section className="py-16 px-4 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700">
-      <div className="max-w-2xl mx-auto text-center">
+    <section className="relative py-16 px-4">
+      <div className="max-w-3xl mx-auto rounded-3xl border border-blue-400/20 bg-gradient-to-r from-blue-600/90 to-purple-600/90 dark:from-blue-700/80 dark:to-purple-700/80 p-8 md:p-10 text-center shadow-[0_18px_60px_rgba(2,6,23,0.35)]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

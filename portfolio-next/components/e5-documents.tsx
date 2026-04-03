@@ -17,7 +17,7 @@ const documents = [
 
 export function E5Documents() {
   return (
-    <section id="documents-e5" className="py-20 px-4 bg-slate-50 dark:bg-slate-900/50">
+    <section id="documents-e5" className="relative py-20 px-4">
       <div className="max-w-5xl mx-auto">
         <h2 className="text-4xl font-bold mb-4">Documents Officiels E5</h2>
         <p className="text-slate-600 dark:text-slate-400 max-w-2xl mb-8">

@@ -8,6 +8,8 @@ export interface Project {
   image: string;
   tags: string[];
   category: "fullstack" | "frontend" | "design" | "ia" | "edtech";
+  categories?: string[];
+  screenshots?: string[];
   btsBlocks?: Array<"Bloc 1" | "Bloc 2" | "Bloc 3">;
   btsCompetences?: string[];
   link?: string;

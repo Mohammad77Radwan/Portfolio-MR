@@ -108,21 +108,23 @@ export function Projects() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full justify-items-center"
         >
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project) => (
               <motion.div
                 key={project.id}
                 variants={itemVariants}
-                className="group bg-white dark:bg-slate-800 rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+                className="group bg-white dark:bg-slate-800 rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full w-full max-w-md"
               >
                 {/* Image */}
                 <div className="relative h-48 bg-gradient-to-r from-blue-400 to-purple-400 overflow-hidden">
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Code className="w-12 h-12 text-white" />
-                  </div>
+                  <img 
+                    src={project.image} 
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
                 </div>
 
                 {/* Content */}

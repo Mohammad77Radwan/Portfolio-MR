@@ -1,7 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, GitBranch, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import type { Project } from "@/types";
 
 type ProjectModalProps = {
@@ -10,14 +13,41 @@ type ProjectModalProps = {
 };
 
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
-  return (
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!project) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [project]);
+
+  const screenshots = project?.screenshots?.length
+    ? project.screenshots
+    : project
+      ? [project.image]
+      : [];
+
+  if (!mounted) {
+    return null;
+  }
+
+  return createPortal(
     <AnimatePresence>
       {project && (
         <>
-          <motion.button
+          <motion.div
             type="button"
             aria-label="Fermer le détail projet"
-            className="fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[1200] bg-black/80"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -27,11 +57,12 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             role="dialog"
             aria-modal="true"
             aria-label={`Détails du projet ${project.title}`}
-            className="fixed inset-x-4 top-6 bottom-6 z-[130] mx-auto max-w-4xl overflow-y-auto rounded-2xl border border-white/20 bg-white/95 p-6 shadow-2xl backdrop-blur-xl dark:border-slate-700/30 dark:bg-slate-900/95"
+            className="fixed inset-x-4 top-6 z-[1300] mx-auto max-h-[88vh] max-w-5xl overflow-y-auto rounded-2xl border border-slate-700/70 bg-slate-950 p-6 shadow-2xl"
             initial={{ opacity: 0, y: 40, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.98 }}
             transition={{ duration: 0.25 }}
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-6 flex items-start justify-between gap-4">
               <div>
@@ -101,6 +132,37 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               ))}
             </div>
 
+            <section className="mb-8">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-500">Screenshots</h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Mini galerie de l&apos;application</p>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                {screenshots.map((src, index) => (
+                  <motion.figure
+                    key={`${project.id}-shot-${index}`}
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.08 }}
+                    className="group relative overflow-hidden rounded-xl border border-slate-200 bg-slate-950/80 dark:border-slate-700"
+                  >
+                    <div className="relative h-52 w-full">
+                      <Image
+                        src={src}
+                        alt={`${project.title} screenshot ${index + 1}`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
+                    </div>
+                    <figcaption className="px-3 py-2 text-xs text-slate-200">Capture {index + 1}</figcaption>
+                  </motion.figure>
+                ))}
+              </div>
+            </section>
+
             <div className="flex flex-wrap gap-3">
               {project.github && (
                 <a
@@ -128,6 +190,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

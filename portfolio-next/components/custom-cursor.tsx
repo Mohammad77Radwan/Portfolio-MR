@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 /**
  * CustomCursor Component
@@ -9,53 +9,86 @@ import { motion } from "framer-motion";
  * S'agrandit au survol des éléments interactifs
  */
 export function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
+  const [enabled, setEnabled] = useState(false);
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
+  const dotX = useSpring(x, { stiffness: 850, damping: 45, mass: 0.2 });
+  const dotY = useSpring(y, { stiffness: 850, damping: 45, mass: 0.2 });
+  const scale = useSpring(1, { stiffness: 500, damping: 32, mass: 0.3 });
+  const dotScale = useSpring(1, { stiffness: 700, damping: 34, mass: 0.25 });
+  const rafRef = useRef<number | null>(null);
+  const latestPointer = useRef({ x: -100, y: -100 });
+  const hoverRef = useRef(false);
 
   useEffect(() => {
-    // Tracker la position de la souris
-    const handleMouseMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+    const isFinePointer = window.matchMedia("(min-width: 1024px) and (pointer: fine)").matches;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!isFinePointer || reduceMotion) {
+      setEnabled(false);
+      return;
+    }
+
+    setEnabled(true);
+
+    const updateCursor = () => {
+      rafRef.current = null;
+      x.set(latestPointer.current.x - 12);
+      y.set(latestPointer.current.y - 12);
     };
 
-    // Détecter le survol des éléments interactifs
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.classList.contains("interactive")
-      ) {
-        setIsHovering(true);
+    const handlePointerMove = (e: PointerEvent) => {
+      latestPointer.current = { x: e.clientX, y: e.clientY };
+
+      if (rafRef.current === null) {
+        rafRef.current = window.requestAnimationFrame(updateCursor);
+      }
+
+      const target = e.target as HTMLElement | null;
+      const interactive = target?.closest("a, button, input, textarea, select, [role='button'], .interactive");
+      const nextHover = Boolean(interactive);
+
+      if (nextHover !== hoverRef.current) {
+        hoverRef.current = nextHover;
+        scale.set(nextHover ? 1.6 : 1);
+        dotScale.set(nextHover ? 1.15 : 1);
       }
     };
 
-    const handleMouseOut = () => {
-      setIsHovering(false);
+    const handlePointerDown = () => {
+      scale.set(0.88);
+      dotScale.set(0.85);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseover", handleMouseOver);
-    document.addEventListener("mouseout", handleMouseOut);
+    const handlePointerUp = () => {
+      scale.set(hoverRef.current ? 1.6 : 1);
+      dotScale.set(hoverRef.current ? 1.15 : 1);
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    window.addEventListener("pointerdown", handlePointerDown, { passive: true });
+    window.addEventListener("pointerup", handlePointerUp, { passive: true });
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseover", handleMouseOver);
-      document.removeEventListener("mouseout", handleMouseOut);
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointerup", handlePointerUp);
     };
-  }, []);
+  }, [dotScale, scale, x, y]);
+
+  if (!enabled) {
+    return null;
+  }
 
   return (
     <>
       {/* Cercle externe */}
       <motion.div
         className="pointer-events-none fixed top-0 left-0 z-[9999] hidden lg:block"
-        animate={{
-          x: position.x - 12,
-          y: position.y - 12,
-          scale: isHovering ? 1.5 : 1,
-        }}
-        transition={{ type: "spring", stiffness: 500, damping: 28 }}
+        style={{ x, y, scale, willChange: "transform" }}
       >
         <div
           className="relative w-6 h-6 rounded-full border-2 border-blue-500"
@@ -68,11 +101,7 @@ export function CustomCursor() {
       {/* Point central */}
       <motion.div
         className="pointer-events-none fixed top-0 left-0 z-[9999] hidden lg:block"
-        animate={{
-          x: position.x - 3,
-          y: position.y - 3,
-        }}
-        transition={{ type: "spring", stiffness: 600, damping: 30 }}
+        style={{ x: dotX, y: dotY, scale: dotScale, willChange: "transform" }}
       >
         <div
           className="w-1.5 h-1.5 rounded-full bg-blue-500"
