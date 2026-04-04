@@ -278,12 +278,20 @@ export function Skills() {
                               );
                             })}
 
-                            <polygon
-                              points={radarPoints(values, radius, center)}
-                              fill="rgba(56,189,248,0.22)"
-                              stroke="rgba(56,189,248,0.9)"
-                              strokeWidth="2"
-                            />
+                            <motion.g
+                              initial={{ scale: 0, opacity: 0.2 }}
+                              whileInView={{ scale: 1, opacity: 1 }}
+                              viewport={{ once: true, amount: 0.4 }}
+                              transition={{ duration: 0.9, ease: "easeOut" }}
+                              style={{ originX: `${center}px`, originY: `${center}px` }}
+                            >
+                              <polygon
+                                points={radarPoints(values, radius, center)}
+                                fill="rgba(56,189,248,0.22)"
+                                stroke="rgba(56,189,248,0.9)"
+                                strokeWidth="2"
+                              />
+                            </motion.g>
 
                               {values.map((value, index) => {
                               const angle = (-Math.PI / 2) + (index * 2 * Math.PI) / RADAR_AXES;
@@ -291,12 +299,17 @@ export function Skills() {
                               const x = center + Math.cos(angle) * r;
                               const y = center + Math.sin(angle) * r;
                               return (
-                                <circle
+                                <motion.circle
                                   key={`dot-${index}`}
-                                  cx={x}
-                                  cy={y}
-                                  r="2.8"
+                                  initial={{ cx: center, cy: center, r: 0, opacity: 0 }}
+                                  whileInView={{ cx: x, cy: y, r: 2.8, opacity: 1 }}
+                                  viewport={{ once: true, amount: 0.4 }}
                                   fill="rgba(255,255,255,0.9)"
+                                  transition={{
+                                    delay: 0.2 + index * 0.08,
+                                    duration: 0.6,
+                                    ease: "easeOut",
+                                  }}
                                 />
                               );
                               })}

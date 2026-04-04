@@ -5,6 +5,8 @@ export interface Project {
   title: string;
   description: string;
   longDescription: string;
+  context?: string;
+  problem?: string;
   image: string;
   tags: string[];
   category: "fullstack" | "frontend" | "design" | "ia" | "edtech";

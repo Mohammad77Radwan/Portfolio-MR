@@ -5,6 +5,10 @@ export const projects: Project[] = [
     id: "morefix-webstore",
     title: "MoreFix WebStore",
     description: "E-commerce - Boutique dynamique de produits reconditionnés",
+    context:
+      "Projet développé pour une boutique de produits reconditionnés avec une attente forte sur la clarté du catalogue, la confiance et le passage à l'achat.",
+    problem:
+      "Concevoir une expérience e-commerce crédible, rapide et sécurisée qui mette en valeur les produits tout en simplifiant la navigation et l'authentification.",
     longDescription:
       "WebStore e-commerce dynamique construite avec Next.js, React, Firebase Auth et Tailwind CSS. Plateforme complète de vente en ligne pour MoreFix avec authentification sécurisée et interface utilisateur moderne et réactive.",
     image: "/projects/screenshots/morefix-webstore-shot-4.png",
@@ -43,6 +47,10 @@ export const projects: Project[] = [
     id: "enterprise-rag-pipeline",
     title: "Enterprise RAG Pipeline",
     description: "IA - Pipeline Retrieval-Augmented Generation asynchrone et distribuée",
+    context:
+      "Prototype orienté usage entreprise pour retrouver rapidement de l'information dispersée dans plusieurs sources documentaires.",
+    problem:
+      "Réduire la latence d'interrogation tout en gardant des réponses pertinentes, traçables et exploitables à grande échelle.",
     longDescription:
       "Pipeline RAG (Retrieval-Augmented Generation) de qualité entreprise avec recherche par vecteurs et traitement de tâches en arrière-plan. Architecture asynchrone conçue pour traiter des volumes de données importants avec latence minimale et scalabilité maximale.",
     image: "/projects/enterprise-rag-pipeline.svg",
@@ -78,6 +86,10 @@ export const projects: Project[] = [
     id: "mindful-journal",
     title: "Mindful Journal",
     description: "PWA + IA - Application de journaling privacy-first alimentée par l'IA",
+    context:
+      "Application pensée pour un usage quotidien, avec une contrainte centrale de confidentialité et de stockage local des données.",
+    problem:
+      "Offrir une aide à l'écriture et au suivi émotionnel sans dépendre d'un stockage cloud ni compromettre la vie privée.",
     longDescription:
       "Application de journaling privacy-first alimentée par l'IA intégrée de Chrome. Vous aide à rédiger, réfléchir et suivre votre humeur en toute sécurité avec stockage 100% local, assistance IA, suivi de l'humeur et contrôle total des données sans stockage cloud.",
     image: "/projects/screenshots/mindful-journal-shot-1.png",
@@ -121,6 +133,10 @@ export const projects: Project[] = [
     id: "go-distributed-orderbook",
     title: "Go Distributed Orderbook",
     description: "Système - Moteur de matching financier haute performance et concurrent",
+    context:
+      "Projet technique centré sur la simulation d'un carnet d'ordres pour des échanges rapides et concurrents.",
+    problem:
+      "Traiter des ordres en temps réel avec une latence minimale, une cohérence stricte et une bonne résistance à la charge.",
     longDescription:
       "Moteur de matching financier concurrent haute performance et simulateur de carnet d'ordres en temps réel construit en Go. Architecture distribuée pour traiter des transactions à haut débit avec une latence minimale et une fiabilité maximale.",
     image: "/projects/go-distributed-orderbook.svg",

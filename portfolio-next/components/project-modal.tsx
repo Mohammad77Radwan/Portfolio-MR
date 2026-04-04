@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, ExternalLink, GitBranch, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type WheelEvent } from "react";
 import { createPortal } from "react-dom";
 import type { Project } from "@/types";
 
@@ -15,6 +15,13 @@ type ProjectModalProps = {
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [mounted, setMounted] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
+  const modalScrollRef = useRef<HTMLDivElement | null>(null);
+  const contextText =
+    project?.context ??
+    "Projet réalisé dans une logique de production réelle avec contraintes UX, performance et robustesse.";
+  const problemText =
+    project?.problem ??
+    "Comment livrer une solution fiable, rapide et compréhensible pour les utilisateurs finaux en gardant une architecture maintenable.";
 
   useEffect(() => {
     setMounted(true);
@@ -23,13 +30,31 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
   useEffect(() => {
     if (!project) return;
 
-    const previousOverflow = document.body.style.overflow;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
     };
   }, [project]);
+
+  const handleModalWheelCapture = (event: WheelEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+
+    const el = modalScrollRef.current;
+    if (!el) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    const isAtTop = scrollTop <= 0;
+    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+    if ((event.deltaY < 0 && isAtTop) || (event.deltaY > 0 && isAtBottom)) {
+      event.preventDefault();
+    }
+  };
 
   const galleryImages = project
     ? Array.from(
@@ -102,12 +127,14 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             role="dialog"
             aria-modal="true"
             aria-label={`Détails du projet ${project.title}`}
-            className="fixed inset-x-4 top-6 z-[1300] mx-auto max-h-[88vh] max-w-5xl overflow-y-auto rounded-2xl border border-slate-700/70 bg-slate-950 p-6 shadow-2xl"
+            className="fixed inset-x-4 top-6 z-[1300] mx-auto max-h-[88vh] max-w-5xl overflow-y-auto overscroll-y-contain rounded-2xl border border-slate-700/70 bg-slate-950 p-6 shadow-2xl"
             initial={{ opacity: 0, y: 40, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.98 }}
             transition={{ duration: 0.25 }}
             onClick={(e) => e.stopPropagation()}
+            onWheelCapture={handleModalWheelCapture}
+            ref={modalScrollRef}
           >
             <div className="mb-6 flex items-start justify-between gap-4">
               <div>
@@ -139,11 +166,11 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             <div className="mb-6 grid gap-6 md:grid-cols-2">
               <article className="rounded-xl border border-slate-200 p-4 dark:border-slate-700">
                 <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">Contexte</h4>
-                <p className="text-sm leading-7 text-slate-700 dark:text-slate-300">Projet réalisé dans une logique de production réelle avec contraintes UX, performance et robustesse.</p>
+                <p className="text-sm leading-7 text-slate-700 dark:text-slate-300">{contextText}</p>
               </article>
               <article className="rounded-xl border border-slate-200 p-4 dark:border-slate-700">
                 <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">Problème</h4>
-                <p className="text-sm leading-7 text-slate-700 dark:text-slate-300">Comment livrer une solution fiable, rapide et compréhensible pour les utilisateurs finaux en gardant une architecture maintenable.</p>
+                <p className="text-sm leading-7 text-slate-700 dark:text-slate-300">{problemText}</p>
               </article>
               <article className="rounded-xl border border-slate-200 p-4 dark:border-slate-700">
                 <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-slate-500">Solution technique</h4>
