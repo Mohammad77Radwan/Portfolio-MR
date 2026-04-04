@@ -11,6 +11,78 @@ type GithubRepo = {
   fork?: boolean;
 };
 
+const FALLBACK_REPOS: GithubRepo[] = [
+  {
+    id: 9001,
+    name: "go-distributed-orderbook",
+    html_url: "https://github.com/Mohammad77Radwan/go-distributed-orderbook",
+    stargazers_count: 0,
+    forks_count: 0,
+    description: "Moteur de matching financier concurrent haute performance en Go.",
+    language: "Go",
+  },
+  {
+    id: 9002,
+    name: "enterprise-rag-pipeline",
+    html_url: "https://github.com/Mohammad77Radwan/enterprise-rag-pipeline",
+    stargazers_count: 0,
+    forks_count: 0,
+    description: "Pipeline RAG asynchrone et distribuée pour charges enterprise.",
+    language: "TypeScript",
+  },
+  {
+    id: 9003,
+    name: "MINDFUL-JOURNAL",
+    html_url: "https://github.com/Mohammad77Radwan/MINDFUL-JOURNAL",
+    stargazers_count: 0,
+    forks_count: 0,
+    description: "Application PWA de journaling privacy-first alimentée par l'IA.",
+    language: "TypeScript",
+  },
+  {
+    id: 9004,
+    name: "Morefix_WebStore",
+    html_url: "https://github.com/Mohammad77Radwan/Morefix_WebStore",
+    stargazers_count: 0,
+    forks_count: 0,
+    description: "WebStore e-commerce dynamique pour produits reconditionnés.",
+    language: "TypeScript",
+  },
+  {
+    id: 9005,
+    name: "collaborative-node-editor",
+    html_url: "https://github.com/Mohammad77Radwan/collaborative-node-editor",
+    stargazers_count: 0,
+    forks_count: 0,
+    description: "Éditeur visuel multiplayer temps réel basé sur CRDT.",
+    language: "TypeScript",
+  },
+  {
+    id: 9006,
+    name: "Portfolio-MR",
+    html_url: "https://github.com/Mohammad77Radwan/Portfolio-MR",
+    stargazers_count: 0,
+    forks_count: 0,
+    description: "Portfolio avancé Next.js - BTS SIO SLAM.",
+    language: "TypeScript",
+  },
+];
+
+function githubHeaders() {
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+    "User-Agent": "portfolio-next",
+  };
+
+  const token = process.env.GITHUB_TOKEN;
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return headers;
+}
+
 const PINNED_REPOS = [
   "go-distributed-orderbook",
   "enterprise-rag-pipeline",
@@ -21,10 +93,8 @@ const PINNED_REPOS = [
 
 async function getLatestRepos(): Promise<GithubRepo[]> {
   const response = await fetch("https://api.github.com/users/Mohammad77Radwan/repos?sort=updated&per_page=24", {
-    cache: "no-store",
-    headers: {
-      Accept: "application/vnd.github+json",
-    },
+    next: { revalidate: 3600 },
+    headers: githubHeaders(),
   });
 
   if (!response.ok) {
@@ -47,10 +117,8 @@ async function getPinnedRepos(): Promise<GithubRepo[]> {
   const results = await Promise.all(
     PINNED_REPOS.map(async (name) => {
       const response = await fetch(`https://api.github.com/repos/Mohammad77Radwan/${name}`, {
-        cache: "no-store",
-        headers: {
-          Accept: "application/vnd.github+json",
-        },
+        next: { revalidate: 3600 },
+        headers: githubHeaders(),
       });
 
       if (!response.ok) {
@@ -76,7 +144,12 @@ async function getRepos(): Promise<GithubRepo[]> {
       array.findIndex((candidate) => candidate.name.toLowerCase() === repo.name.toLowerCase()) === index,
   );
 
-  return merged.slice(0, 6);
+  const candidates = merged.slice(0, 6);
+  if (candidates.length > 0) {
+    return candidates;
+  }
+
+  return FALLBACK_REPOS;
 }
 
 export async function GithubRepos() {
@@ -103,10 +176,7 @@ export async function GithubRepos() {
           </a>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {repos.length === 0 ? (
-            <p className="text-slate-600 dark:text-slate-300">Impossible de charger les dépôts pour le moment.</p>
-          ) : (
-            repos.map((repo) => (
+          {repos.map((repo) => (
               <article key={repo.id} className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800">
                 <h3 className="font-bold text-lg mb-2">{repo.name}</h3>
                 <p className="line-clamp-3 min-h-[3.75rem] text-sm text-slate-600 dark:text-slate-300">
@@ -127,8 +197,7 @@ export async function GithubRepos() {
                   <ExternalLink className="h-4 w-4" />
                 </a>
               </article>
-            ))
-          )}
+            ))}
         </div>
       </div>
     </section>

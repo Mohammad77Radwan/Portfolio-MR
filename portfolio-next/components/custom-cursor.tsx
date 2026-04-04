@@ -10,6 +10,7 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
  */
 export function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
+  const [visible, setVisible] = useState(false);
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
   const dotX = useSpring(x, { stiffness: 850, damping: 45, mass: 0.2 });
@@ -19,17 +20,16 @@ export function CustomCursor() {
   const rafRef = useRef<number | null>(null);
   const latestPointer = useRef({ x: -100, y: -100 });
   const hoverRef = useRef(false);
+  const hasMovedRef = useRef(false);
 
   useEffect(() => {
     const isFinePointer = window.matchMedia("(min-width: 1024px) and (pointer: fine)").matches;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setEnabled(isFinePointer && !reduceMotion);
+  }, []);
 
-    if (!isFinePointer || reduceMotion) {
-      setEnabled(false);
-      return;
-    }
-
-    setEnabled(true);
+  useEffect(() => {
+    if (!enabled) return;
 
     const updateCursor = () => {
       rafRef.current = null;
@@ -37,7 +37,12 @@ export function CustomCursor() {
       y.set(latestPointer.current.y - 12);
     };
 
-    const handlePointerMove = (e: PointerEvent) => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!hasMovedRef.current) {
+        hasMovedRef.current = true;
+        setVisible(true);
+      }
+
       latestPointer.current = { x: e.clientX, y: e.clientY };
 
       if (rafRef.current === null) {
@@ -55,6 +60,10 @@ export function CustomCursor() {
       }
     };
 
+    const handleMouseLeave = () => {
+      setVisible(false);
+    };
+
     const handlePointerDown = () => {
       scale.set(0.88);
       dotScale.set(0.85);
@@ -65,7 +74,8 @@ export function CustomCursor() {
       dotScale.set(hoverRef.current ? 1.15 : 1);
     };
 
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mouseleave", handleMouseLeave, { passive: true });
     window.addEventListener("pointerdown", handlePointerDown, { passive: true });
     window.addEventListener("pointerup", handlePointerUp, { passive: true });
 
@@ -73,11 +83,12 @@ export function CustomCursor() {
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }
-      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseleave", handleMouseLeave);
       window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("pointerup", handlePointerUp);
     };
-  }, [dotScale, scale, x, y]);
+  }, [dotScale, enabled, scale, x, y]);
 
   if (!enabled) {
     return null;
@@ -87,7 +98,7 @@ export function CustomCursor() {
     <>
       {/* Cercle externe */}
       <motion.div
-        className="pointer-events-none fixed top-0 left-0 z-[9999] hidden lg:block"
+        className={`pointer-events-none fixed top-0 left-0 z-[9999] hidden lg:block ${visible ? "opacity-100" : "opacity-0"}`}
         style={{ x, y, scale, willChange: "transform" }}
       >
         <div
@@ -100,7 +111,7 @@ export function CustomCursor() {
 
       {/* Point central */}
       <motion.div
-        className="pointer-events-none fixed top-0 left-0 z-[9999] hidden lg:block"
+        className={`pointer-events-none fixed top-0 left-0 z-[9999] hidden lg:block ${visible ? "opacity-100" : "opacity-0"}`}
         style={{ x: dotX, y: dotY, scale: dotScale, willChange: "transform" }}
       >
         <div

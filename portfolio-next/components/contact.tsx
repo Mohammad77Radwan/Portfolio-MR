@@ -3,7 +3,7 @@
 import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { motion } from "framer-motion";
-import { Send, Mail, Phone, MapPin } from "lucide-react";
+import { Send, Mail, GitBranch, MapPin } from "lucide-react";
 import {
   initialContactState,
   submitContactAction,
@@ -103,16 +103,16 @@ export function Contact() {
             className="bg-white dark:bg-slate-800 rounded-lg p-6 text-center"
           >
             <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center">
-              <Phone className="w-6 h-6 text-pink-600 dark:text-pink-400" />
+              <GitBranch className="w-6 h-6 text-pink-600 dark:text-pink-400" />
             </div>
-            <h3 className="font-bold mb-2">LinkedIn</h3>
+            <h3 className="font-bold mb-2">GitHub</h3>
             <a
-              href="https://linkedin.com/in/mohammad-radwan"
+              href="https://github.com/Mohammad77Radwan"
               target="_blank"
               rel="noopener noreferrer"
               className="text-slate-600 dark:text-slate-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors text-sm"
             >
-              Mohammad Radwan
+              @Mohammad77Radwan
             </a>
           </motion.div>
         </motion.div>

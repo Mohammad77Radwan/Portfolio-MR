@@ -53,13 +53,20 @@ export function Testimonials() {
               className="bg-white dark:bg-slate-800 rounded-lg p-8 shadow-sm hover:shadow-lg transition-all duration-300"
             >
               {/* Stars */}
-              <div className="flex gap-1 mb-4">
-                {Array.from({ length: testimonial.rating }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-5 h-5 fill-yellow-400 text-yellow-400"
-                  />
-                ))}
+              <div className="mb-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {Array.from({ length: testimonial.rating }).map((_, i) => (
+                    <span
+                      key={i}
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-amber-300/35 bg-amber-400/15"
+                    >
+                      <Star className="h-4 w-4 fill-amber-300 text-amber-300" />
+                    </span>
+                  ))}
+                </div>
+                <span className="rounded-full border border-cyan-300/35 bg-cyan-400/10 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-200">
+                  {testimonial.rating}.0 / 5
+                </span>
               </div>
 
               {/* Quote */}

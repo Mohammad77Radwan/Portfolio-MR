@@ -21,6 +21,9 @@ function TiltCard({ project, onOpen, featured = false, index = 0 }: { project: P
   const spotlight = useMotionTemplate`radial-gradient(260px circle at ${pointerX}px ${pointerY}px, rgba(56, 189, 248, 0.18), transparent 72%)`;
   const borderGlow = useMotionTemplate`radial-gradient(170px circle at ${pointerX}px ${pointerY}px, rgba(255, 255, 255, 0.9), transparent 72%)`;
   const isUnderDevelopment = project.id === "collaborative-node-editor";
+  const coverImage = [project.image, ...(project.screenshots ?? [])].find((src) =>
+    /\.(png|jpe?g|webp|gif)$/i.test(src),
+  );
 
   return (
     <motion.button
@@ -66,24 +69,26 @@ function TiltCard({ project, onOpen, featured = false, index = 0 }: { project: P
         style={{ backgroundImage: spotlight, opacity: glowOpacity }}
       />
 
-      <div className={`relative w-full ${featured ? "h-64 md:h-[65%]" : "h-44"}`}>
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          sizes={featured ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
-          placeholder="blur"
-          blurDataURL={BLUR}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/20 to-transparent" />
-        <motion.div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-16 right-8 h-40 w-40 rounded-full border border-cyan-300/20"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 16, ease: "linear", repeat: Infinity }}
-        />
-      </div>
+      {coverImage && (
+        <div className={`relative w-full ${featured ? "h-64 md:h-[65%]" : "h-44"}`}>
+          <Image
+            src={coverImage}
+            alt={project.title}
+            fill
+            sizes={featured ? "(max-width: 768px) 100vw, 66vw" : "(max-width: 768px) 100vw, 33vw"}
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            placeholder="blur"
+            blurDataURL={BLUR}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/20 to-transparent" />
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-16 right-8 h-40 w-40 rounded-full border border-cyan-300/20"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 16, ease: "linear", repeat: Infinity }}
+          />
+        </div>
+      )}
       <div className="flex flex-1 flex-col gap-3 p-5 text-slate-900 dark:text-white">
         <div className="flex flex-wrap gap-2">
           <span className="rounded-full bg-slate-900/15 px-2.5 py-1 text-[11px] font-semibold text-slate-900 backdrop-blur dark:bg-white/20 dark:text-white">{project.date}</span>

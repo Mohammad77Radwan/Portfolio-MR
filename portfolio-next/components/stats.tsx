@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Rocket, Cpu, CalendarClock, Code2 } from "lucide-react";
 import { AnimatedCounter } from "./animated-counter";
 
 const stats = [
@@ -8,25 +9,25 @@ const stats = [
     label: "Projets Réalisés",
     value: 20,
     suffix: "+",
-    icon: "🚀",
+    icon: Rocket,
   },
   {
     label: "Technologies",
     value: 15,
     suffix: "+",
-    icon: "⚙️",
+    icon: Cpu,
   },
   {
     label: "Années d'Expérience",
-    value: 2,
+    value: 3,
     suffix: "+",
-    icon: "📅",
+    icon: CalendarClock,
   },
   {
     label: "Code Commits",
     value: 500,
     suffix: "+",
-    icon: "💻",
+    icon: Code2,
   },
 ];
 
@@ -65,7 +66,11 @@ export function Stats() {
               variants={itemVariants}
               className="text-center p-6 rounded-lg border border-white/15 bg-white/70 dark:bg-slate-900/60 backdrop-blur-md hover:shadow-lg transition-shadow"
             >
-              <div className="text-4xl mb-4">{stat.icon}</div>
+              <div className="mb-4 flex justify-center">
+                <div className="rounded-xl border border-cyan-300/30 bg-cyan-400/10 p-3 text-cyan-200">
+                  <stat.icon className="h-7 w-7" />
+                </div>
+              </div>
               <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
                 <AnimatedCounter
                   from={0}

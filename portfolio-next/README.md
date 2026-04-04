@@ -8,6 +8,19 @@ npm install
 npm run dev
 ```
 
+## Configuration Formspree (Contact)
+Le formulaire de contact utilise Formspree via une Server Action.
+
+1. Créez un formulaire sur Formspree.
+2. Copiez l'endpoint (ex: `https://formspree.io/f/xxxxabcd`).
+3. Ajoutez la variable d'environnement:
+
+```bash
+FORMSPREE_ENDPOINT=https://formspree.io/f/xxxxabcd
+```
+
+Sans cette variable, l'envoi affichera un message de configuration manquante.
+
 Ouvrir [http://localhost:3000](http://localhost:3000).
 
 ## Scripts

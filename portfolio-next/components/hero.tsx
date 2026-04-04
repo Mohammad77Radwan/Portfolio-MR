@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChevronDown, GitBranch, Share2, Mail } from "lucide-react";
+import { ChevronDown, GitBranch, Mail } from "lucide-react";
 import Link from "next/link";
 import { useScrambleText } from "@/hooks/use-scramble-text";
 
@@ -93,7 +93,7 @@ export function Hero() {
             <div className="text-sm text-slate-600 dark:text-slate-400">Projets</div>
           </div>
           <div>
-            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">2+</div>
+            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">3+</div>
             <div className="text-sm text-slate-600 dark:text-slate-400">Ans d&apos;expérience</div>
           </div>
           <div>
@@ -134,15 +134,6 @@ export function Hero() {
             aria-label="GitHub"
           >
             <GitBranch className="w-6 h-6" />
-          </a>
-          <a
-            href="https://linkedin.com/in/mohammad-radwan"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-3 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
-            aria-label="LinkedIn"
-          >
-            <Share2 className="w-6 h-6" />
           </a>
           <a
             href="mailto:mohammadradwn804@gmail.com"

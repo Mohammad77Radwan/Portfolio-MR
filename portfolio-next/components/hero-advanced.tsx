@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { MagneticButton } from "./magnetic-button";
 import { GlassCard } from "./glass-card";
 import { AuroraBackground } from "./aurora-background";
-import { ChevronDown, Download } from "lucide-react";
+import { ChevronDown, Download, GitBranch } from "lucide-react";
 import { useScrambleText } from "@/hooks/use-scramble-text";
 
 /**
@@ -129,7 +129,9 @@ export function HeroAdvanced() {
           >
             Étudiant en BTS SIO spécialisé en SLAM (Développement Applicatif).
             Je construis des applications web modernes, performantes et accessibles.
-            Passionné par Next.js, React, et les pratiques de conception user-centric.
+            Reconnu pour une maturité professionnelle avancée, une grande autonomie
+            et une curiosité intellectuelle rare, je suis passionné par Next.js,
+            React et les pratiques de conception user-centric.
           </motion.p>
 
           {/* Stats Cards avec Glassmorphism */}
@@ -140,7 +142,7 @@ export function HeroAdvanced() {
             {[
               { number: "20+", label: "Projets" },
               { number: "15+", label: "Technologies" },
-              { number: "2+", label: "Ans d'Expérience" },
+              { number: "3+", label: "Ans d'Expérience" },
             ].map((stat, i) => (
               <motion.div key={i} variants={wordVariants}>
                 <GlassCard hoverable>
@@ -188,23 +190,19 @@ export function HeroAdvanced() {
                 name: "GitHub",
                 url: "https://github.com/Mohammad77Radwan",
               },
-              {
-                name: "LinkedIn",
-                url: "https://linkedin.com/in/mohammad-radwan",
-              },
-              { name: "Email", url: "mailto:mohammadradwn804@gmail.com" },
             ].map((social) => (
               <motion.a
                 key={social.name}
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.06, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label={`Ouvrir ${social.name}`}
-                className="interactive p-3 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
+                className="interactive inline-flex min-h-12 items-center gap-2 rounded-xl border border-cyan-300/45 bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-indigo-500/20 px-6 py-3 text-cyan-100 shadow-[0_0_0_1px_rgba(34,211,238,0.15),0_10px_30px_rgba(59,130,246,0.25)] transition-all hover:border-cyan-200/60 hover:shadow-[0_0_0_1px_rgba(34,211,238,0.3),0_14px_36px_rgba(59,130,246,0.35)]"
               >
-                <span className="text-sm font-medium">{social.name}</span>
+                <GitBranch className="h-5 w-5" />
+                <span className="text-base font-semibold tracking-wide">{social.name}</span>
               </motion.a>
             ))}
           </motion.div>

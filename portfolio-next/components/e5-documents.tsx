@@ -3,7 +3,7 @@ import { Download, ExternalLink } from "lucide-react";
 const documents = [
   {
     title: "Tableau de synthèse E5",
-    href: "/documents/tableau-synthese-e5.pdf",
+    href: "/documents/tableau-synthese-e5.xlsx",
   },
   {
     title: "Attestation de stage 1re année",
@@ -37,7 +37,9 @@ export function E5Documents() {
                 <ExternalLink className="w-4 h-4 text-slate-400" />
               </div>
               <p className="font-semibold text-slate-900 dark:text-slate-50">{doc.title}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">PDF téléchargeable</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                {doc.href.endsWith(".xlsx") ? "Fichier XLSX téléchargeable" : "PDF téléchargeable"}
+              </p>
             </a>
           ))}
         </div>

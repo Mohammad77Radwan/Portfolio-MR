@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GitBranch, Share2, Mail, MapPin, ExternalLink } from "lucide-react";
+import { GitBranch, Mail, MapPin, ExternalLink } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -70,11 +70,11 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <a
-                  href="/documents/tableau-synthese-e5.pdf"
+                  href="/documents/tableau-synthese-e5.xlsx"
                   download
                   className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors flex items-center gap-1"
                 >
-                  Tableau E5 <ExternalLink className="w-3 h-3" />
+                  Tableau E5 (XLSX) <ExternalLink className="w-3 h-3" />
                 </a>
               </li>
               <li>
@@ -128,15 +128,6 @@ export function Footer() {
                 aria-label="GitHub"
               >
                 <GitBranch className="w-5 h-5" />
-              </a>
-              <a
-                href="https://linkedin.com/in/mohammad-radwan"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="min-h-11 min-w-11 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50"
-                aria-label="LinkedIn"
-              >
-                <Share2 className="w-5 h-5" />
               </a>
               <a
                 href="mailto:mohammadradwn804@gmail.com"

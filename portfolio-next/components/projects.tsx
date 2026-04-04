@@ -112,20 +112,28 @@ export function Projects() {
         >
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project) => (
+              (() => {
+                const coverImage = [project.image, ...(project.screenshots ?? [])].find((src) =>
+                  /\.(png|jpe?g|webp|gif)$/i.test(src),
+                );
+
+                return (
               <motion.div
                 key={project.id}
                 variants={itemVariants}
                 className="group bg-white dark:bg-slate-800 rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full w-full max-w-md"
               >
                 {/* Image */}
-                <div className="relative h-48 bg-gradient-to-r from-blue-400 to-purple-400 overflow-hidden">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
-                </div>
+                {coverImage && (
+                  <div className="relative h-48 bg-gradient-to-r from-blue-400 to-purple-400 overflow-hidden">
+                    <img 
+                      src={coverImage} 
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
+                  </div>
+                )}
 
                 {/* Content */}
                 <div className="flex-1 p-6 flex flex-col">
@@ -176,6 +184,8 @@ export function Projects() {
                   </div>
                 </div>
               </motion.div>
+                );
+              })()
             ))
           ) : (
             <div className="col-span-full text-center py-12">

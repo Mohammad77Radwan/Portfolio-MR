@@ -7,11 +7,15 @@ export const projects: Project[] = [
     description: "E-commerce - Boutique dynamique de produits reconditionnés",
     longDescription:
       "WebStore e-commerce dynamique construite avec Next.js, React, Firebase Auth et Tailwind CSS. Plateforme complète de vente en ligne pour MoreFix avec authentification sécurisée et interface utilisateur moderne et réactive.",
-    image: "/projects/morefix-webstore.svg",
+    image: "/projects/screenshots/morefix-webstore-shot-4.png",
     tags: ["E-commerce", "Next.js", "Firebase"],
     category: "fullstack",
     categories: ["ecommerce"],
-    screenshots: ["/projects/screenshots/morefix-webstore-shot.svg"],
+    screenshots: [
+      "/projects/screenshots/morefix-webstore-shot-4.png",
+      "/projects/screenshots/morefix-webstore-shot-2.png",
+      "/projects/screenshots/morefix-webstore-shot-3.png",
+    ],
     btsBlocks: ["Bloc 1", "Bloc 2", "Bloc 3"],
     btsCompetences: [
       "Mettre à disposition un service informatique",
@@ -142,7 +146,11 @@ export const projects: Project[] = [
     tags: ["GO", "Distributed Systems", "Real-time", "Finance"],
     category: "fullstack",
     categories: ["systems"],
-    screenshots: ["/projects/screenshots/go-distributed-orderbook-shot.svg"],
+    screenshots: [
+      "/projects/screenshots/go-distributed-orderbook-shot-2.png",
+      "/projects/screenshots/go-distributed-orderbook-shot-3.png",
+      "/projects/screenshots/go-distributed-orderbook-shot-4.png",
+    ],
     btsBlocks: ["Bloc 1", "Bloc 2", "Bloc 3"],
     btsCompetences: [
       "Mettre à disposition un service informatique",
@@ -230,7 +238,53 @@ export const skills: Skill[] = [
   },
 ];
 
+export const formations = [
+  {
+    title: "GitHub Foundations",
+    institution: "GitHub",
+    period: "Certification GH-900 - Octobre 2025",
+  },
+  {
+    title: "BTS SIO SLAM",
+    institution: "Lycée Simone Weil, Saint-Priest-en-Jarez",
+    period: "2024 - 2026",
+  },
+  {
+    title: "Licence Informatique - Parcours MIPC",
+    institution: "Université Jean Monnet, Saint-Étienne",
+    period: "2023 - 2024",
+  },
+  {
+    title: "Baccalauréat STI2D",
+    institution: "Lycée Étienne Mimard, Saint-Étienne",
+    period: "Obtenu en 2023",
+  },
+];
+
+export const languages = [
+  { name: "Français", level: 90, flag: "FR", proficiency: "C1" },
+  { name: "Anglais", level: 95, flag: "EN", proficiency: "C2" },
+  { name: "Arabe", level: 100, flag: "AR", proficiency: "Natif" },
+];
+
 export const experience: Experience[] = [
+  {
+    id: "morefix-stage-2",
+    title: "Développeur Web Full-Stack",
+    company: "MoreFix",
+    location: "Saint-Étienne",
+    startDate: "2026-01-05",
+    endDate: "2026-02-06",
+    description:
+      "Invité à revenir chez MoreFix pour un second stage BTS, avec davantage d'autonomie sur des évolutions full-stack et un niveau d'exigence renforcé.",
+    highlights: [
+      "Conception et implémentation de fonctionnalités front-end et back-end en autonomie",
+      "Méthodologie de développement saluée pour sa rigueur et sa qualité d'exécution",
+      "Créativité technique confirmée sur des livrables React, TypeScript et Node.js",
+      "Adaptation rapide aux priorités métier et aux contraintes de production",
+    ],
+    technologies: ["React", "TypeScript", "Node.js", "Next.js", "Tailwind CSS"],
+  },
   {
     id: "morefix-stage",
     title: "Développeur Web Full-Stack",
@@ -268,6 +322,38 @@ export const experience: Experience[] = [
       "Certifications: GitHub Foundations (GH-900)",
     ],
     technologies: ["PHP", "Laravel", "JavaScript", "React", "SQL"],
+  },
+  {
+    id: "license-mipc",
+    title: "Licence Informatique - Parcours MIPC",
+    company: "Université Jean Monnet",
+    location: "Saint-Étienne",
+    startDate: "2023-09",
+    endDate: "2024-06",
+    description:
+      "Parcours universitaire en informatique orienté bases scientifiques et algorithmique, consolidant les fondamentaux nécessaires au développement logiciel moderne.",
+    highlights: [
+      "Renforcement des bases en algorithmique et logique de programmation",
+      "Approfondissement des concepts mathématiques appliqués à l'informatique",
+      "Méthodologie de travail académique et résolution de problèmes complexes",
+    ],
+    technologies: ["Algorithmique", "Mathématiques", "Programmation", "Méthodologie"],
+  },
+  {
+    id: "bac-sti2d",
+    title: "Baccalauréat STI2D",
+    company: "Lycée Étienne Mimard",
+    location: "Saint-Étienne",
+    startDate: "2020-09",
+    endDate: "2023-07",
+    description:
+      "Diplôme technologique obtenu en 2023, avec une approche orientée innovation, systèmes techniques et culture scientifique appliquée.",
+    highlights: [
+      "Validation du baccalauréat STI2D avec orientation technologique",
+      "Développement de compétences en analyse de systèmes et travail de projet",
+      "Premières bases structurées en démarche technique et scientifique",
+    ],
+    technologies: ["STI2D", "Systèmes techniques", "Gestion de projet"],
   },
 ];
 
@@ -309,21 +395,21 @@ export const blogPosts: BlogPost[] = [
 
 export const testimonials: Testimonial[] = [
   {
-    id: "testimonial-1",
-    name: "Thomas Dupont",
-    role: "Responsable Technique",
+    id: "testimonial-yasser-1",
+    name: "Yasser Khamis",
+    role: "Gérant",
     company: "MoreFix",
     content:
-      "Mohammad a livré un site web complet et fonctionnel en seulement 5 semaines. Son professionnalisme et sa capacité à apprendre rapidement ont été remarquables. L'équipe a été capable de reprendre le projet en autonomie.",
+      "Stagiaire exceptionnel. A brillé sur sa méthodologie et sa créativité en utilisant les technologies React, TypeScript et Node.js. Avenir prometteur.",
     rating: 5,
   },
   {
-    id: "testimonial-2",
-    name: "Sophie Martin",
-    role: "Directrice Pédagogique",
-    company: "Lycée Simone Weil",
+    id: "testimonial-yasser-2",
+    name: "Yasser Khamis",
+    role: "Gérant",
+    company: "MoreFix",
     content:
-      "Mohammad démontre une passion authentique pour le développement web. Ses projets montrent une grande maturité et une compréhension profonde des bonnes pratiques de développement.",
+      "Le travail fourni est d'une qualité remarquable, souvent au-delà des attentes pour un niveau BTS. Grande autonomie, rigueur technique, et une excellente capacité d'adaptation. Il sera un atout précieux pour toute entreprise.",
     rating: 5,
   },
 ];

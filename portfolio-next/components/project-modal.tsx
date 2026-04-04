@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, GitBranch, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, GitBranch, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Project } from "@/types";
@@ -14,6 +14,7 @@ type ProjectModalProps = {
 
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [mounted, setMounted] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -30,11 +31,48 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     };
   }, [project]);
 
-  const screenshots = project?.screenshots?.length
-    ? project.screenshots
-    : project
-      ? [project.image]
-      : [];
+  const galleryImages = project
+    ? Array.from(
+        new Set(
+          (project.screenshots ?? []).filter((src) => /\.(png|jpe?g|webp|gif)$/i.test(src)),
+        ),
+      )
+    : [];
+
+  const closeLightbox = () => setActiveImageIndex(null);
+
+  const showPreviousImage = () => {
+    if (activeImageIndex === null || galleryImages.length === 0) return;
+    setActiveImageIndex((activeImageIndex - 1 + galleryImages.length) % galleryImages.length);
+  };
+
+  const showNextImage = () => {
+    if (activeImageIndex === null || galleryImages.length === 0) return;
+    setActiveImageIndex((activeImageIndex + 1) % galleryImages.length);
+  };
+
+  useEffect(() => {
+    setActiveImageIndex(null);
+  }, [project?.id]);
+
+  useEffect(() => {
+    if (activeImageIndex === null) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeLightbox();
+      }
+      if (event.key === "ArrowLeft") {
+        showPreviousImage();
+      }
+      if (event.key === "ArrowRight") {
+        showNextImage();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeImageIndex, galleryImages.length]);
 
   if (!mounted) {
     return null;
@@ -44,7 +82,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     <AnimatePresence>
       {project && (
         <>
-          <motion.div
+          <motion.button
             type="button"
             aria-label="Fermer le détail projet"
             className="fixed inset-0 z-[1200] bg-black/80"
@@ -76,7 +114,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 type="button"
                 aria-label="Fermer la modale projet"
                 onClick={onClose}
-                className="min-h-11 min-w-11 rounded-lg border border-slate-300 p-2 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                className="-mt-1 ml-2 min-h-11 min-w-11 shrink-0 rounded-lg border border-slate-300 p-2 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -132,36 +170,48 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               ))}
             </div>
 
-            <section className="mb-8">
-              <div className="mb-3 flex items-center justify-between gap-3">
-                <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-500">Screenshots</h4>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Mini galerie de l&apos;application</p>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                {screenshots.map((src, index) => (
-                  <motion.figure
-                    key={`${project.id}-shot-${index}`}
-                    initial={{ opacity: 0, y: 14 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: index * 0.08 }}
-                    className="group relative overflow-hidden rounded-xl border border-slate-200 bg-slate-950/80 dark:border-slate-700"
-                  >
-                    <div className="relative h-52 w-full">
-                      <Image
-                        src={src}
-                        alt={`${project.title} screenshot ${index + 1}`}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
-                    </div>
-                    <figcaption className="px-3 py-2 text-xs text-slate-200">Capture {index + 1}</figcaption>
-                  </motion.figure>
-                ))}
-              </div>
-            </section>
+            {galleryImages.length > 0 && (
+              <section className="mb-8">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-500">Screenshots</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Mini galerie de l&apos;application</p>
+                </div>
+                <div className={`grid gap-4 ${galleryImages.length > 1 ? "md:grid-cols-2" : "grid-cols-1"}`}>
+                  {galleryImages.map((src, index) => (
+                    <motion.figure
+                      key={`${project.id}-shot-${index}`}
+                      initial={{ opacity: 0, y: 14 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: index * 0.08 }}
+                      className="group relative overflow-hidden rounded-xl border border-slate-200 bg-slate-950/80 dark:border-slate-700"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setActiveImageIndex(index)}
+                        aria-label={`Agrandir la capture ${index + 1}`}
+                        className="block w-full text-left"
+                      >
+                        <div className={`relative w-full ${galleryImages.length > 1 ? "h-52" : "h-64 md:h-72"}`}>
+                          <Image
+                            src={src}
+                            alt={`${project.title} screenshot ${index + 1}`}
+                            fill
+                            sizes={galleryImages.length > 1 ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 1024px) 100vw, 900px"}
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
+                          <div className="absolute bottom-2 right-2 rounded-full border border-white/20 bg-slate-950/70 px-2 py-1 text-[11px] font-medium text-slate-100 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            Plein écran
+                          </div>
+                        </div>
+                      </button>
+                      <figcaption className="px-3 py-2 text-xs text-slate-200">Capture {index + 1}</figcaption>
+                    </motion.figure>
+                  ))}
+                </div>
+              </section>
+            )}
 
             <div className="flex flex-wrap gap-3">
               {project.github && (
@@ -188,6 +238,90 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               )}
             </div>
           </motion.div>
+
+          <AnimatePresence>
+            {activeImageIndex !== null && galleryImages[activeImageIndex] && (
+              <>
+                <motion.button
+                  type="button"
+                  aria-label="Fermer la visionneuse d'image"
+                  className="fixed inset-0 z-[1400] bg-slate-950/92 backdrop-blur-md"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={closeLightbox}
+                />
+
+                <motion.div
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={`Visionneuse image ${activeImageIndex + 1}`}
+                  className="fixed inset-0 z-[1500] flex items-center justify-center px-4"
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={closeLightbox}
+                >
+                  <motion.div
+                    className="relative w-full max-w-7xl"
+                    onClick={(event) => event.stopPropagation()}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: 12, opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                  >
+                    <button
+                      type="button"
+                      aria-label="Fermer"
+                      onClick={closeLightbox}
+                      className="absolute right-3 top-3 z-20 min-h-11 min-w-11 rounded-full border border-white/20 bg-slate-900/70 p-2 text-slate-100 transition hover:bg-slate-800"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
+
+                    {galleryImages.length > 1 && (
+                      <>
+                        <button
+                          type="button"
+                          aria-label="Image précédente"
+                          onClick={showPreviousImage}
+                          className="absolute left-3 top-1/2 z-20 -translate-y-1/2 min-h-11 min-w-11 rounded-full border border-white/20 bg-slate-900/70 p-2 text-slate-100 transition hover:bg-slate-800"
+                        >
+                          <ChevronLeft className="h-5 w-5" />
+                        </button>
+                        <button
+                          type="button"
+                          aria-label="Image suivante"
+                          onClick={showNextImage}
+                          className="absolute right-3 top-1/2 z-20 -translate-y-1/2 min-h-11 min-w-11 rounded-full border border-white/20 bg-slate-900/70 p-2 text-slate-100 transition hover:bg-slate-800"
+                        >
+                          <ChevronRight className="h-5 w-5" />
+                        </button>
+                      </>
+                    )}
+
+                    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70 shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
+                      <div className="relative h-[76vh] w-full">
+                        <Image
+                          src={galleryImages[activeImageIndex]}
+                          alt={`${project.title} image ${activeImageIndex + 1}`}
+                          fill
+                          sizes="100vw"
+                          className="object-contain"
+                          priority
+                        />
+                      </div>
+                    </div>
+
+                    <p className="mt-3 text-center text-sm text-slate-300">
+                      Capture {activeImageIndex + 1} / {galleryImages.length}
+                    </p>
+                  </motion.div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </>
       )}
     </AnimatePresence>,

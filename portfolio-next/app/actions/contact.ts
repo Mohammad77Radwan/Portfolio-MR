@@ -55,8 +55,48 @@ export async function submitContactAction(
     };
   }
 
-  // In production, plug this to Resend/Sendgrid/DB.
-  console.log("[contact] new submission", { at: new Date().toISOString() });
+  const formspreeEndpoint = process.env.FORMSPREE_ENDPOINT;
+  if (!formspreeEndpoint) {
+    return {
+      ok: false,
+      message:
+        "Le formulaire de contact n'est pas configuré (FORMSPREE_ENDPOINT manquant).",
+      fieldErrors: {},
+    };
+  }
+
+  try {
+    const response = await fetch(formspreeEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: parsed.data.name,
+        email: parsed.data.email,
+        subject: parsed.data.subject,
+        message: parsed.data.message,
+      }),
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        message:
+          "Échec de l'envoi du message. Merci de réessayer dans quelques instants.",
+        fieldErrors: {},
+      };
+    }
+  } catch {
+    return {
+      ok: false,
+      message:
+        "Impossible de joindre le service de contact pour le moment.",
+      fieldErrors: {},
+    };
+  }
 
   return {
     ok: true,
