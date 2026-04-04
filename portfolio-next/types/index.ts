@@ -14,6 +14,7 @@ export interface Project {
   btsCompetences?: string[];
   link?: string;
   github?: string;
+  demoVideo?: string;
   date: string;
   featured: boolean;
   stats?: {

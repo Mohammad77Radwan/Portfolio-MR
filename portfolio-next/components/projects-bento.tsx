@@ -154,7 +154,7 @@ export function ProjectsBento() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-10 relative z-10">
           <h2 className="mb-4 bg-gradient-to-r from-cyan-200 via-blue-200 to-fuchsia-200 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
-            Projets Réalisés - Bento Showcase
+            Projets Réalisés
           </h2>
           <p className="max-w-2xl text-slate-200 text-base md:text-lg">
             Chaque projet est présenté comme une mini case-study interactive pour montrer l&apos;impact, les choix d&apos;architecture et la valeur métier.

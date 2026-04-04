@@ -4,6 +4,12 @@ import { motion } from "framer-motion";
 import { blogPosts } from "@/lib/data";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 
+function formatTime(dateString: string) {
+  return new Date(dateString).toLocaleTimeString("fr-FR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 export function Blog() {
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -85,7 +91,7 @@ export function Blog() {
                       </div>
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        {post.readTime} min
+                        {formatTime(post.date)}
                       </div>
                     </div>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -126,7 +132,7 @@ export function Blog() {
                       </div>
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        {post.readTime} min
+                        {formatTime(post.date)}
                       </div>
                       <span className="px-2 py-1 rounded bg-slate-100 dark:bg-slate-700">
                         {post.category}

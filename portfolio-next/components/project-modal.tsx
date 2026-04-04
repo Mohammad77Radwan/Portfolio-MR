@@ -51,6 +51,13 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     setActiveImageIndex((activeImageIndex + 1) % galleryImages.length);
   };
 
+  const getVideoMimeType = (videoPath: string) => {
+    if (videoPath.endsWith(".mp4")) return "video/mp4";
+    if (videoPath.endsWith(".webm")) return "video/webm";
+    if (videoPath.endsWith(".mov")) return "video/quicktime";
+    return "video/x-matroska";
+  };
+
   useEffect(() => {
     setActiveImageIndex(null);
   }, [project?.id]);
@@ -209,6 +216,33 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                       <figcaption className="px-3 py-2 text-xs text-slate-200">Capture {index + 1}</figcaption>
                     </motion.figure>
                   ))}
+                </div>
+              </section>
+            )}
+
+            {project.demoVideo && (
+              <section className="mb-8">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-500">Démo locale</h4>
+                  <a
+                    href={project.demoVideo}
+                    download
+                    className="text-xs font-medium text-blue-500 hover:text-blue-400"
+                  >
+                    Télécharger la vidéo
+                  </a>
+                </div>
+                <div className="overflow-hidden rounded-xl border border-slate-200 bg-slate-950/80 dark:border-slate-700">
+                  <video
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="w-full max-h-[60vh] bg-black"
+                    poster={galleryImages[0]}
+                  >
+                    <source src={project.demoVideo} type={getVideoMimeType(project.demoVideo)} />
+                    Votre navigateur ne peut pas lire cette vidéo. Vous pouvez la télécharger avec le lien ci-dessus.
+                  </video>
                 </div>
               </section>
             )}
