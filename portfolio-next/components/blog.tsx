@@ -46,10 +46,17 @@ export function Blog() {
     fetch("/api/blog-articles")
       .then((res) => res.json())
       .then((data) => {
-        setArticles(data);
+        if (Array.isArray(data)) {
+          setArticles(data);
+          setTips(data.map(() => TECH_TIPS[Math.floor(Math.random() * TECH_TIPS.length)]));
+        } else {
+          setArticles([]);
+        }
         setLoading(false);
-        // Assign a random tip to each article
-        setTips(data.map(() => TECH_TIPS[Math.floor(Math.random() * TECH_TIPS.length)]));
+      })
+      .catch(() => {
+        setArticles([]);
+        setLoading(false);
       });
   }, []);
 
