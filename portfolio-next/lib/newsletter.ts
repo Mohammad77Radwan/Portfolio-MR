@@ -3,7 +3,7 @@ export function notifySubscribersOfNewPost(post) {
   console.log("Notify subscribers of new post:", post);
 }
 
-export function sendWelcomeSubscriberEmail(subscriber: { email: string }) {
+export function sendWelcomeSubscriberEmail(email: string, unsubscribeToken: string) {
   // Placeholder: Implement your welcome email logic here
-  console.log("Send welcome email to:", subscriber.email);
+  console.log("Send welcome email to:", email, "with token:", unsubscribeToken);
 }
