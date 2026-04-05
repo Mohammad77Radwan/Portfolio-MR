@@ -1,191 +1,278 @@
-# Portfolio MR - BTS SIO SLAM (Session 2026)
+# Mohammad Radwan – Portfolio-MR
 
-[Français](README.md) | [English](README.en.md)
-
-Repository principal du portfolio professionnel et pedagogique de Mohammad Radwan.
-
-Ce depot centralise :
-- le portfolio web moderne (Next.js),
-- la documentation de conformite E4/E5,
-- les preuves de competences BTS SIO,
-- les ressources projets, stages, certifications et CV.
-
-## Objectifs du repository
-
-Ce repository a un double objectif :
-1. Fournir un support clair et exploitable pour le jury BTS SIO (CCF E4/E5).
-2. Presenter un profil technique solide pour poursuite d'etudes et recrutement.
-
-## Sommaire rapide
-
-- [Vue d'ensemble](#vue-densemble)
-- [Demarrage rapide](#demarrage-rapide)
-- [Structure du repository](#structure-du-repository)
-- [Portfolio web principal](#portfolio-web-principal)
-- [Documentation E4E5](#documentation-e4e5)
-- [Projets et preuves techniques](#projets-et-preuves-techniques)
-- [Conformite et verification](#conformite-et-verification)
-- [Workflow recommande](#workflow-recommande)
-- [Roadmap](#roadmap)
-- [Contact](#contact)
-
-## Vue d'ensemble
-
-Entrées principales :
-- [portfolio-next](portfolio-next/README.md) : application portfolio Next.js (version principale)
-- [index.html](index.html) : version statique de portfolio
-- [documentation](documentation/README.md) : base documentaire E4/E5
-- [projets](projets/README.md) : dossiers projets et templates
-- [stages](stages/README.md) : pieces de stage
-- [certifications](certifications/README.md) : certifications techniques
-- [cv](cv/README.md) : CV et informations de parcours
-- [medias](medias/README.md) : ressources visuelles
-
-## Demarrage rapide
-
-### Prerequis
-- Node.js 20+
-- npm 10+
-- Git
-
-### Lancer le portfolio Next.js
-```bash
-cd /workspaces/Portfolio-MR/portfolio-next
-npm install
-npm run dev
-```
-
-Puis ouvrir : [http://localhost:3000](http://localhost:3000)
-
-### Build de verification
-```bash
-cd /workspaces/Portfolio-MR/portfolio-next
-npm run lint
-npm run build
-```
-
-## Structure du repository
-
-```text
-Portfolio-MR/
-|-- README.md
-|-- index.html
-|-- assets/
-|-- portfolio-next/
-|   |-- app/
-|   |-- components/
-|   |-- lib/
-|   |-- public/
-|   |-- types/
-|   `-- README.md
-|-- documentation/
-|   |-- README.md
-|   |-- CHECKLIST-CONFORMITE-E4-E5.md
-|   |-- E5-EXIGENCES-OFFICIELLES.md
-|   |-- competences/
-|   |-- cybersecurite/
-|   |-- diaporama/
-|   |-- evaluation/
-|   |-- oral/
-|   |-- tableau-synthese/
-|   `-- veille-technologique/
-|-- projets/
-|   |-- README.md
-|   `-- _template/
-|-- stages/
-|-- certifications/
-|-- cv/
-`-- medias/
-```
-
-## Portfolio web principal
-
-Le projet principal est [portfolio-next](portfolio-next/README.md).
-
-Technologies utilisees :
-- Next.js 16
-- React 19
-- TypeScript
-- Tailwind CSS v4
-- Framer Motion
-- Zod
-
-Principales sections fonctionnelles :
-- Hero avance
-- Statistiques animees
-- Projects Bento + modal detaillee
-- Skills / Experience / Testimonials / Blog
-- GitHub live section
-- Documents E5 telechargeables
-- Newsletter
-- Contact avec validation server-side
-
-Actifs publics importants :
-- Documents jury : [portfolio-next/public/documents](portfolio-next/public/documents)
-- Visuels projets : [portfolio-next/public/projects](portfolio-next/public/projects)
-- Social preview : [portfolio-next/public/og-cover.svg](portfolio-next/public/og-cover.svg)
-
-## Documentation E4/E5
-
-Point d'entree : [documentation/README.md](documentation/README.md)
-
-Documents critiques :
-- Exigences officielles : [documentation/E5-EXIGENCES-OFFICIELLES.md](documentation/E5-EXIGENCES-OFFICIELLES.md)
-- Checklist conformite : [documentation/CHECKLIST-CONFORMITE-E4-E5.md](documentation/CHECKLIST-CONFORMITE-E4-E5.md)
-- Competences BTS : [documentation/competences/BLOCS-BTS-SIO-COMPETENCES-SAVOIRS.md](documentation/competences/BLOCS-BTS-SIO-COMPETENCES-SAVOIRS.md)
-- Tableau de synthese : [documentation/tableau-synthese/README.md](documentation/tableau-synthese/README.md)
-- Script oral : [documentation/oral/SCRIPT-ORAL-10-MIN.md](documentation/oral/SCRIPT-ORAL-10-MIN.md)
-- Questions jury : [documentation/oral/QUESTIONS-JURY-30-QA.md](documentation/oral/QUESTIONS-JURY-30-QA.md)
-- Annexes evaluation : [documentation/evaluation/README.md](documentation/evaluation/README.md)
-
-## Projets et preuves techniques
-
-Point d'entree : [projets/README.md](projets/README.md)
-
-Template standardise :
-- [projets/_template/README-projet-template.md](projets/_template/README-projet-template.md)
-
-Le template couvre notamment :
-- contexte et objectifs,
-- architecture et choix techniques,
-- mapping competences BTS,
-- securite,
-- tests,
-- difficultes et retours d'experience.
-
-## Conformite et verification
-
-Avant remise jury, verifier au minimum :
-1. Les liens de documents E5 sont fonctionnels.
-2. Les pieces de stage sont presentes et finales.
-3. Le tableau de synthese est complet et coherent avec les projets.
-4. Le portfolio se lance sans erreur en local.
-5. Le build de production passe (`npm run build`).
-6. La navigation mobile est exploitable.
-7. Les preuves BTS sont explicites dans chaque projet.
-
-## Workflow recommande
-
-1. Mettre a jour les contenus dans [portfolio-next/lib/data.ts](portfolio-next/lib/data.ts).
-2. Ajouter ou remplacer les visuels dans [portfolio-next/public/projects](portfolio-next/public/projects).
-3. Ajouter les documents officiels finaux dans [portfolio-next/public/documents](portfolio-next/public/documents).
-4. Verifier lint/build.
-5. Mettre a jour la documentation E4/E5 si une preuve change.
-6. Commit avec message explicite.
-
-## Roadmap
-
-- Remplacer les PDF placeholders par versions officielles signees.
-- Remplacer les visuels projets placeholders par captures finales.
-- Ajouter une version anglaise du portfolio (optionnel).
-- Ajouter analytics et observabilite legere (optionnel).
-
-## Contact
-
-- GitHub : [Mohammad77Radwan](https://github.com/Mohammad77Radwan)
-- Email : mohammadradwn804@gmail.com
-- LinkedIn : profil personnel Mohammad Radwan
+[![Build](https://img.shields.io/github/actions/workflow/status/Mohammad77Radwan/Portfolio-MR/ci.yml?branch=main)](https://github.com/Mohammad77Radwan/Portfolio-MR/actions)
+[![License](https://img.shields.io/github/license/Mohammad77Radwan/Portfolio-MR)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.2-blue)](https://nextjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.2-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
 
 ---
 
-Si vous ouvrez ce repository pour la premiere fois, commencez par [portfolio-next/README.md](portfolio-next/README.md) pour le run technique, puis [documentation/README.md](documentation/README.md) pour le cadre E4/E5.
+## 🇫🇷 Français | 🇬🇧 English
+
+Ce README est bilingue. Faites défiler pour la version française ou anglaise.
+
+This README is bilingual. Scroll for the French or English version.
+
+---
+
+# 🇬🇧 English
+
+## 🚀 Advanced Developer Portfolio
+A modern, production-grade portfolio for full-stack and AI projects. Built with Next.js 16, React 19, Tailwind CSS, and a real-time blog integration. Designed for performance, accessibility, and developer experience.
+
+## 🏗️ Tech Stack
+| Layer         | Technology                | Version   |
+|--------------|---------------------------|-----------|
+| Frontend     | Next.js                   | 16.2.2    |
+| UI           | React                     | 19.2.4    |
+| Styling      | Tailwind CSS              | 4.2.2     |
+| Animations   | Framer Motion, Lucide     | 11.14.0, 1.7.0 |
+| Markdown     | gray-matter               | 4.0.3     |
+| API          | Next.js API Routes        |           |
+| Data Fetch   | Axios, Fetch API          | 1.7.7     |
+| State        | React, Zustand            | 4.5.5     |
+| Forms        | React Hook Form           | 7.52.2    |
+| Lint/Format  | ESLint, Prettier          | 9.x       |
+| CI/CD        | GitHub Actions            |           |
+
+## 📦 Folder Structure
+```
+Portfolio-MR/
+├── portfolio-next/
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── blog-articles/route.ts   # Real-time blog API
+│   │   ├── layout.tsx                   # Root layout
+│   │   └── page.tsx                     # Main page
+│   ├── components/                      # UI components
+│   ├── lib/                             # Data & utils
+│   ├── public/                          # Static assets
+│   ├── styles/                          # Global styles
+│   ├── types/                           # TypeScript types
+│   ├── tailwind.config.js               # Tailwind config
+│   └── ...
+├── certifications/                      # Certifications & docs
+├── cv/                                  # CV & resume
+├── documentation/                       # E5/E4 docs, checklists
+├── projets/                             # Project templates
+├── stages/                              # Internships
+└── ...
+```
+
+## 🖼️ Architecture Diagram
+```mermaid
+flowchart TD
+    subgraph WebApp [Portfolio Frontend]
+      A[Next.js 16 (App Router)]
+      B[React 19]
+      C[Tailwind CSS]
+      D[Framer Motion]
+      E[Lucide Icons]
+      F[Custom API Routes]
+      G[Blog Integration]
+    end
+    subgraph GitHub [Blog-Veille-Tech Repo]
+      H[MDX Articles]
+      I[GitHub API]
+    end
+    A --> B
+    B --> C
+    B --> D
+    B --> E
+    A --> F
+    F --> G
+    G --> I
+    I --> H
+```
+
+## ✨ Features
+- ⚡ **Lightning-fast**: Next.js 16 + Turbopack
+- 🎨 **Modern UI**: Tailwind, Framer Motion, Lucide
+- 📝 **Live Blog Sync**: Fetches MDX articles from GitHub in real time
+- 🧑‍💻 **Developer Experience**: TypeScript, ESLint, Prettier, VS Code ready
+- 🛡️ **Accessibility**: Keyboard nav, color contrast, semantic HTML
+- 📱 **Responsive**: Mobile-first, adaptive layouts
+- 🧩 **Component-driven**: Reusable, composable UI
+- 🌐 **Multi-language**: French-first, easy to localize
+- 🏆 **Showcases Skills**: Real projects, tech radar, certifications
+
+## ⚙️ Setup & Usage
+```bash
+# 1. Clone the repo
+$ git clone https://github.com/Mohammad77Radwan/Portfolio-MR.git
+$ cd Portfolio-MR/portfolio-next
+# 2. Install dependencies
+$ npm install
+# 3. (Optional) Add a GitHub token for higher API rate limits
+$ echo "GITHUB_TOKEN=ghp_xxx..." >> .env.local
+# 4. Start the dev server
+$ npm run dev
+# 5. Open http://localhost:3000
+```
+
+## 🔌 API & Integrations
+- **/api/blog-articles**: Serverless API route fetches MDX articles from the Blog-Veille-Tech repo using the GitHub API.
+- **Contact Form**: Integrated with Formspree (see `.env.local`).
+- **Live GitHub Stats**: Pulls real commit/project data for credibility.
+
+## 🧑‍💻 Advanced Developer Notes
+- **Performance**: Turbopack, code splitting, image optimization, minimal bundle size.
+- **Accessibility**: Focus rings, ARIA labels, color contrast, keyboard nav.
+- **Testing**: Ready for Jest/React Testing Library (add your tests in `/__tests__/`).
+- **CI/CD**: GitHub Actions for lint/build/test (add your workflow in `.github/workflows/`).
+- **Security**: No secrets in repo, uses environment variables, rate-limited API.
+- **Customization**: Easily add new sections, projects, or integrations.
+- **Deployment**: Vercel-ready, works on Netlify/Render/Heroku.
+
+## 🏅 Why This Portfolio Stands Out
+- **Real-time blog integration** (not static): Showcases live writing and technical depth.
+- **Professional structure**: Mirrors enterprise-grade monorepo setups.
+- **Modern stack**: Next.js 16, React 19, Tailwind 4, Framer Motion, Lucide.
+- **Impressive UI/UX**: Animations, gradients, accessibility, and mobile-first.
+- **Comprehensive documentation**: For recruiters, collaborators, and future you.
+- **Ready for scale**: Add more projects, sections, or even a CMS.
+
+## 🤝 Contributing
+Pull requests are welcome! For major changes, open an issue first to discuss what you’d like to change.
+
+## 📄 License
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+## 📬 Contact
+- **Email**: mohammadradwn804@gmail.com
+- **GitHub**: [@Mohammad77Radwan](https://github.com/Mohammad77Radwan)
+- **Location**: Saint-Étienne, France
+
+> _“Built with passion for modern web, developer experience, and technical excellence.”_
+
+---
+
+# 🇫🇷 Français
+
+## 🚀 Portfolio Développeur Avancé
+Un portfolio moderne et professionnel pour projets full-stack et IA. Construit avec Next.js 16, React 19, Tailwind CSS, et une intégration blog en temps réel. Pensé pour la performance, l’accessibilité et l’expérience développeur.
+
+## 🏗️ Stack Technique
+| Couche        | Technologie               | Version   |
+|--------------|--------------------------|-----------|
+| Frontend     | Next.js                  | 16.2.2    |
+| UI           | React                    | 19.2.4    |
+| Style        | Tailwind CSS             | 4.2.2     |
+| Animations   | Framer Motion, Lucide    | 11.14.0, 1.7.0 |
+| Markdown     | gray-matter              | 4.0.3     |
+| API          | Next.js API Routes       |           |
+| Data Fetch   | Axios, Fetch API         | 1.7.7     |
+| State        | React, Zustand           | 4.5.5     |
+| Forms        | React Hook Form          | 7.52.2    |
+| Lint/Format  | ESLint, Prettier         | 9.x       |
+| CI/CD        | GitHub Actions           |           |
+
+## 📦 Structure des Dossiers
+```
+Portfolio-MR/
+├── portfolio-next/
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── blog-articles/route.ts   # API blog temps réel
+│   │   ├── layout.tsx                   # Layout racine
+│   │   └── page.tsx                     # Page principale
+│   ├── components/                      # Composants UI
+│   ├── lib/                             # Données & utilitaires
+│   ├── public/                          # Assets statiques
+│   ├── styles/                          # Styles globaux
+│   ├── types/                           # Types TypeScript
+│   ├── tailwind.config.js               # Config Tailwind
+│   └── ...
+├── certifications/                      # Certificats & docs
+├── cv/                                  # CV & résumé
+├── documentation/                       # Docs E5/E4, checklists
+├── projets/                             # Templates projets
+├── stages/                              # Stages
+└── ...
+```
+
+## 🖼️ Schéma d’Architecture
+```mermaid
+flowchart TD
+    subgraph WebApp [Portfolio Frontend]
+      A[Next.js 16 (App Router)]
+      B[React 19]
+      C[Tailwind CSS]
+      D[Framer Motion]
+      E[Lucide Icons]
+      F[Custom API Routes]
+      G[Blog Integration]
+    end
+    subgraph GitHub [Blog-Veille-Tech Repo]
+      H[MDX Articles]
+      I[GitHub API]
+    end
+    A --> B
+    B --> C
+    B --> D
+    B --> E
+    A --> F
+    F --> G
+    G --> I
+    I --> H
+```
+
+## ✨ Fonctionnalités
+- ⚡ **Ultra-rapide** : Next.js 16 + Turbopack
+- 🎨 **UI Moderne** : Tailwind, Framer Motion, Lucide
+- 📝 **Blog en temps réel** : Récupère les articles MDX depuis GitHub
+- 🧑‍💻 **Expérience Dev** : TypeScript, ESLint, Prettier, prêt pour VS Code
+- 🛡️ **Accessibilité** : Navigation clavier, contraste, HTML sémantique
+- 📱 **Responsive** : Mobile-first, adaptatif
+- 🧩 **Composants** : UI réutilisables, composables
+- 🌐 **Multi-langue** : Français par défaut, facile à localiser
+- 🏆 **Valorise les compétences** : Projets réels, radar tech, certifications
+
+## ⚙️ Installation & Utilisation
+```bash
+# 1. Cloner le repo
+$ git clone https://github.com/Mohammad77Radwan/Portfolio-MR.git
+$ cd Portfolio-MR/portfolio-next
+# 2. Installer les dépendances
+$ npm install
+# 3. (Optionnel) Ajouter un token GitHub pour lever les limites API
+$ echo "GITHUB_TOKEN=ghp_xxx..." >> .env.local
+# 4. Lancer le serveur dev
+$ npm run dev
+# 5. Ouvrir http://localhost:3000
+```
+
+## 🔌 API & Intégrations
+- **/api/blog-articles** : API serverless qui récupère les articles MDX du repo Blog-Veille-Tech via GitHub API.
+- **Formulaire de contact** : Intégré à Formspree (voir `.env.local`).
+- **Stats GitHub live** : Données réelles de commits/projets.
+
+## 🧑‍💻 Notes Avancées
+- **Performance** : Turbopack, code splitting, optimisation images, bundle minimal.
+- **Accessibilité** : Focus, ARIA, contraste, navigation clavier.
+- **Tests** : Prêt pour Jest/React Testing Library (ajoutez vos tests dans `/__tests__/`).
+- **CI/CD** : GitHub Actions pour lint/build/test (workflow dans `.github/workflows/`).
+- **Sécurité** : Pas de secrets dans le repo, variables d’env, API limitée.
+- **Customisation** : Ajoutez facilement sections, projets, intégrations.
+- **Déploiement** : Prêt Vercel, fonctionne sur Netlify/Render/Heroku.
+
+## 🏅 Pourquoi ce Portfolio est Unique
+- **Blog temps réel** (pas statique) : Montre la veille et la profondeur technique.
+- **Structure pro** : Inspirée des monorepos d’entreprise.
+- **Stack moderne** : Next.js 16, React 19, Tailwind 4, Framer Motion, Lucide.
+- **UI/UX remarquable** : Animations, gradients, accessibilité, mobile-first.
+- **Doc complète** : Pour recruteurs, collaborateurs, et vous-même.
+- **Prêt à scaler** : Ajoutez projets, sections, ou un CMS.
+
+## 🤝 Contribution
+Les PR sont bienvenues ! Pour les changements majeurs, ouvrez une issue pour discuter.
+
+## 📄 Licence
+Projet sous licence MIT. Voir [LICENSE](LICENSE).
+
+## 📬 Contact
+- **Email** : mohammadradwn804@gmail.com
+- **GitHub** : [@Mohammad77Radwan](https://github.com/Mohammad77Radwan)
+- **Localisation** : Saint-Étienne, France
+
+> _“Conçu avec passion pour le web moderne, l’expérience dev et l’excellence technique.”_
