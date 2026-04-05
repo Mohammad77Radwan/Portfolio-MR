@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useMotionTemplate, useMotionValue, useTransform } from "framer-motion";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback, memo } from "react";
 import { projects } from "@/lib/data";
 import type { Project } from "@/types";
 import { ProjectModal } from "./project-modal";
@@ -128,7 +128,7 @@ export function ProjectsBento() {
     [],
   );
 
-  const categoryLabel = (category: string) => {
+  const categoryLabel = useCallback((category: string) => {
     if (category === "all") return "Tous";
     if (category === "ia") return "IA";
     if (category === "fullstack") return "Full-Stack";
@@ -136,24 +136,42 @@ export function ProjectsBento() {
     if (category === "ecommerce") return "E-commerce";
     if (category === "pwa") return "PWA";
     return category.toUpperCase();
-  };
+  }, []);
 
-  const filtered = projects.filter((project) => {
-    const categoryMatch =
-      activeCategory === "all" ||
-      project.category === activeCategory ||
-      (project.categories ?? []).includes(activeCategory);
-    const queryMatch = `${project.title} ${project.description}`.toLowerCase().includes(query.toLowerCase());
-    return categoryMatch && queryMatch;
-  });
+  const handleCategoryChange = useCallback((category: string) => {
+    setActiveCategory(category);
+  }, []);
+
+  const handleQueryChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  }, []);
+
+  const handleProjectSelect = useCallback((project: Project) => {
+    setSelected(project);
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    setSelected(null);
+  }, []);
+
+  const filtered = useMemo(() => {
+    return projects.filter((project) => {
+      const categoryMatch =
+        activeCategory === "all" ||
+        project.category === activeCategory ||
+        (project.categories ?? []).includes(activeCategory);
+      const queryMatch = `${project.title} ${project.description}`.toLowerCase().includes(query.toLowerCase());
+      return categoryMatch && queryMatch;
+    });
+  }, [activeCategory, query]);
 
   const [first, ...rest] = filtered;
 
   return (
-    <section id="projects" className="relative isolate px-4 py-24">
+    <section id="projects" className="relative isolate px-4 py-24" aria-labelledby="projects-heading">
       <div className="max-w-7xl mx-auto">
         <div className="mb-10 relative z-10">
-          <h2 className="mb-4 bg-gradient-to-r from-cyan-200 via-blue-200 to-fuchsia-200 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
+          <h2 id="projects-heading" className="mb-4 bg-gradient-to-r from-cyan-200 via-blue-200 to-fuchsia-200 bg-clip-text text-4xl font-bold text-transparent md:text-5xl">
             Projets Réalisés
           </h2>
           <p className="max-w-2xl text-slate-200 text-base md:text-lg">
@@ -162,19 +180,24 @@ export function ProjectsBento() {
         </div>
 
         <div className="relative z-20">
-          <div className="mb-8 grid gap-4 md:grid-cols-[1fr_auto]">
+          <div className="mb-8 grid gap-4 md:grid-cols-[1fr_auto]" role="search">
+            <label htmlFor="project-search" className="sr-only">Rechercher un projet</label>
             <input
+              id="project-search"
+              type="search"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={handleQueryChange}
               placeholder="Recherche projet, technologie, impact..."
               className="rounded-xl border border-cyan-300/30 bg-slate-900/70 px-4 py-3 text-slate-100 outline-none ring-cyan-400/40 placeholder:text-slate-400 focus:ring-4"
+              aria-describedby="search-results-count"
             />
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrer par catégorie">
               {categories.map((category) => (
                 <button
                   key={category}
                   type="button"
-                  onClick={() => setActiveCategory(category)}
+                  onClick={() => handleCategoryChange(category)}
+                  aria-pressed={activeCategory === category}
                   className={`min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition ${
                     activeCategory === category
                       ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-[0_0_30px_rgba(14,165,233,0.35)]"
@@ -187,22 +210,25 @@ export function ProjectsBento() {
             </div>
           </div>
 
+          <p id="search-results-count" className="sr-only" aria-live="polite">
+              {filtered.length} projet{filtered.length !== 1 ? "s" : ""} trouvé{filtered.length !== 1 ? "s" : ""}
+            </p>
           {filtered.length === 0 ? (
             <p className="rounded-xl border border-dashed border-slate-400 p-8 text-center text-slate-600 dark:border-slate-700 dark:text-slate-300">
               Aucun projet ne correspond à ce filtre.
             </p>
           ) : (
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-4 md:auto-rows-[220px]">
-              {first && <TiltCard project={first} onOpen={setSelected} featured index={0} />}
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-4 md:auto-rows-[220px]" role="list" aria-label="Liste des projets">
+              {first && <TiltCard project={first} onOpen={handleProjectSelect} featured index={0} />}
               {rest.map((project, index) => (
-                <TiltCard key={project.id} project={project} onOpen={setSelected} index={index + 1} />
+                <TiltCard key={project.id} project={project} onOpen={handleProjectSelect} index={index + 1} />
               ))}
             </div>
           )}
         </div>
       </div>
 
-      <ProjectModal project={selected} onClose={() => setSelected(null)} />
+      <ProjectModal project={selected} onClose={handleModalClose} />
     </section>
   );
 }

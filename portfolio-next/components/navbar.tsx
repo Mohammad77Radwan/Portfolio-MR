@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useCallback, useId } from "react";
 import { Menu, X } from "lucide-react";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const mobileMenuId = useId();
 
   const navItems = [
     { label: "Accueil", href: "#" },
@@ -15,8 +16,20 @@ export function Navbar() {
     { label: "Contact", href: "#contact" },
   ];
 
+  const toggleMenu = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
+
+  const closeMenu = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md">
+    <nav 
+      className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md"
+      role="navigation"
+      aria-label="Navigation principale"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -48,10 +61,11 @@ export function Navbar() {
             {/* Mobile Menu Button */}
             <button
               type="button"
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={toggleMenu}
               className="md:hidden min-h-11 min-w-11 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
               aria-expanded={isOpen}
+              aria-controls={mobileMenuId}
             >
               {isOpen ? (
                 <X className="w-5 h-5" />
@@ -64,13 +78,18 @@ export function Navbar() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden border-t border-slate-200 dark:border-slate-800 py-4 space-y-2">
+          <div 
+            id={mobileMenuId}
+            className="md:hidden border-t border-slate-200 dark:border-slate-800 py-4 space-y-2"
+            role="menu"
+          >
             {navItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
                 className="block px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                onClick={() => setIsOpen(false)}
+                onClick={closeMenu}
+                role="menuitem"
               >
                 {item.label}
               </Link>

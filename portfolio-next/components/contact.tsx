@@ -1,61 +1,77 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useCallback, useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Send, Mail, GitBranch, MapPin } from "lucide-react";
-
-
-function SubmitButton({ pending }: { pending: boolean }) {
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-    >
-      {pending ? "Envoi en cours..." : "Envoyer le message"}
-      {!pending && <Send className="w-4 h-4" />}
-    </button>
-  );
-}
-
+import { Send, Mail, GitBranch, MapPin, Loader2 } from "lucide-react";
+import { ContactFormSchema, type ContactFormData } from "@/lib/schemas";
+import { submitContactAction, initialContactState } from "@/app/actions/contact";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { FormField, FormLabel, FormError, FormSuccess } from "@/components/ui/form-field";
 
 export function Contact() {
-  const [pending, setPending] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const [ok, setOk] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state, formAction, isPending] = useActionState(
+    submitContactAction,
+    initialContactState
+  );
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setPending(true);
-    setMessage(null);
-    setOk(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+    setError,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(ContactFormSchema),
+    mode: "onBlur",
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+      honeypot: "",
+    },
+  });
 
-    const form = e.currentTarget;
-    const data = new FormData(form);
-
-    try {
-      const res = await fetch("https://formspree.io/f/xqegyree", {
-        method: "POST",
-        body: data,
-        headers: {
-          Accept: "application/json",
-        },
+  // Handle server-side field errors
+  useEffect(() => {
+    if (state.fieldErrors) {
+      Object.entries(state.fieldErrors).forEach(([field, messages]) => {
+        if (messages && messages[0]) {
+          setError(field as keyof ContactFormData, {
+            type: "server",
+            message: messages[0],
+          });
+        }
       });
-      if (res.ok) {
-        setOk(true);
-        setMessage("Merci ! Votre message a été envoyé.");
-        form.reset();
-      } else {
-        setOk(false);
-        setMessage("Erreur lors de l'envoi. Veuillez réessayer.");
-      }
-    } catch (err) {
-      setOk(false);
-      setMessage("Erreur lors de l'envoi. Veuillez réessayer.");
-    } finally {
-      setPending(false);
     }
-  }
+  }, [state.fieldErrors, setError]);
+
+  // Reset form on success
+  useEffect(() => {
+    if (state.success) {
+      reset();
+    }
+  }, [state.success, reset]);
+
+  const onSubmit = useCallback(
+    (data: ContactFormData) => {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("email", data.email);
+      formData.append("subject", data.subject);
+      formData.append("message", data.message);
+      if (data.honeypot) {
+        formData.append("website", data.honeypot);
+      }
+      formAction(formData);
+    },
+    [formAction]
+  );
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -71,7 +87,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-20 px-4">
+    <section id="contact" className="relative py-20 px-4" aria-labelledby="contact-heading">
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -79,10 +95,11 @@ export function Contact() {
           transition={{ duration: 0.8 }}
           className="mb-12"
         >
-          <h2 className="text-4xl font-bold mb-4">Parlons ensemble</h2>
-          <p className="text-slate-600 dark:text-slate-400 max-w-2xl">
-            Intéressé par une collaboration ? N&apos;hésitez pas à me contacter pour
-            discuter de vos projets ou opportunités.
+          <h2 id="contact-heading" className="text-4xl font-bold mb-4 text-white">
+            Parlons ensemble
+          </h2>
+          <p className="text-slate-400 max-w-2xl">
+            {"Intéressé par une collaboration ? N'hésitez pas à me contacter pour discuter de vos projets ou opportunités."}
           </p>
         </motion.div>
 
@@ -96,15 +113,15 @@ export function Contact() {
           {/* Contact Info Cards */}
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-slate-800 rounded-lg p-6 text-center"
+            className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 text-center"
           >
-            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-              <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+              <Mail className="w-6 h-6 text-blue-400" aria-hidden="true" />
             </div>
-            <h3 className="font-bold mb-2">Email</h3>
+            <h3 className="font-bold mb-2 text-white">Email</h3>
             <a
               href="mailto:mohammadradwn804@gmail.com"
-              className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-sm"
+              className="text-slate-400 hover:text-blue-400 transition-colors text-sm"
             >
               mohammadradwn804@gmail.com
             </a>
@@ -112,30 +129,28 @@ export function Contact() {
 
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-slate-800 rounded-lg p-6 text-center"
+            className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 text-center"
           >
-            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-              <MapPin className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
+              <MapPin className="w-6 h-6 text-cyan-400" aria-hidden="true" />
             </div>
-            <h3 className="font-bold mb-2">Localisation</h3>
-            <p className="text-slate-600 dark:text-slate-400 text-sm">
-              Saint-Étienne, France
-            </p>
+            <h3 className="font-bold mb-2 text-white">Localisation</h3>
+            <p className="text-slate-400 text-sm">Saint-Étienne, France</p>
           </motion.div>
 
           <motion.div
             variants={itemVariants}
-            className="bg-white dark:bg-slate-800 rounded-lg p-6 text-center"
+            className="bg-slate-900/50 border border-slate-800 rounded-xl p-6 text-center"
           >
-            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center">
-              <GitBranch className="w-6 h-6 text-pink-600 dark:text-pink-400" />
+            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-slate-500/10 border border-slate-500/20 flex items-center justify-center">
+              <GitBranch className="w-6 h-6 text-slate-400" aria-hidden="true" />
             </div>
-            <h3 className="font-bold mb-2">GitHub</h3>
+            <h3 className="font-bold mb-2 text-white">GitHub</h3>
             <a
               href="https://github.com/Mohammad77Radwan"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-600 dark:text-slate-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors text-sm"
+              className="text-slate-400 hover:text-blue-400 transition-colors text-sm"
             >
               @Mohammad77Radwan
             </a>
@@ -147,78 +162,137 @@ export function Contact() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="relative overflow-hidden rounded-xl p-px"
+          className="relative overflow-hidden rounded-2xl p-px"
         >
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 animate-[spin_7s_linear_infinite] bg-[conic-gradient(from_0deg,rgba(14,165,233,0.95),rgba(168,85,247,0.9),rgba(236,72,153,0.9),rgba(14,165,233,0.95))]"
+            className="pointer-events-none absolute inset-0 animate-[spin_7s_linear_infinite] bg-[conic-gradient(from_0deg,rgba(14,165,233,0.95),rgba(6,182,212,0.9),rgba(14,165,233,0.9),rgba(14,165,233,0.95))]"
           />
 
-          <div className="relative rounded-[11px] bg-white dark:bg-slate-800 p-8">
-            <h3 className="text-2xl font-bold mb-6">Envoyez-moi un message</h3>
+          <div className="relative rounded-[15px] bg-slate-900 p-8 border border-slate-800">
+            <h3 className="text-2xl font-bold mb-6 text-white">
+              Envoyez-moi un message
+            </h3>
 
-            {message && (
+            {/* Status Messages */}
+            {state.message && !state.fieldErrors && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`mb-6 p-4 rounded-lg border ${
-                  ok
-                    ? "bg-green-100 text-green-700 border-green-300 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700"
-                    : "bg-red-100 text-red-700 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700"
-                }`}
+                className="mb-6"
+                role="alert"
               >
-                {ok ? "✓ " : "⚠ "}
-                {message}
+                {state.success ? (
+                  <FormSuccess message={state.message} />
+                ) : (
+                  <FormError message={state.message} />
+                )}
               </motion.div>
             )}
 
-            <form id="contact-form" onSubmit={handleSubmit} className="space-y-6">
+            <form
+              ref={formRef}
+              id="contact-form"
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-6"
+              noValidate
+            >
+              {/* Honeypot field for spam protection */}
               <input
                 type="text"
-                name="website"
+                {...register("honeypot")}
                 tabIndex={-1}
                 autoComplete="off"
                 className="hidden"
                 aria-hidden="true"
               />
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Votre nom"
-                  required
-                  className="px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {/* No field error display in Formspree version */}
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Votre email"
-                  required
-                  className="px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {/* No field error display in Formspree version */}
+                <FormField>
+                  <FormLabel htmlFor="name" required>
+                    Nom
+                  </FormLabel>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Votre nom"
+                    aria-describedby={errors.name ? "name-error" : undefined}
+                    {...register("name")}
+                    error={errors.name?.message}
+                  />
+                  {errors.name && (
+                    <FormError id="name-error" message={errors.name.message} />
+                  )}
+                </FormField>
+
+                <FormField>
+                  <FormLabel htmlFor="email" required>
+                    Email
+                  </FormLabel>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Votre email"
+                    aria-describedby={errors.email ? "email-error" : undefined}
+                    {...register("email")}
+                    error={errors.email?.message}
+                  />
+                  {errors.email && (
+                    <FormError id="email-error" message={errors.email.message} />
+                  )}
+                </FormField>
               </div>
 
-              <input
-                type="text"
-                name="subject"
-                placeholder="Sujet"
-                required
-                className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {/* No field error display in Formspree version */}
+              <FormField>
+                <FormLabel htmlFor="subject" required>
+                  Sujet
+                </FormLabel>
+                <Input
+                  id="subject"
+                  type="text"
+                  placeholder="Sujet de votre message"
+                  aria-describedby={errors.subject ? "subject-error" : undefined}
+                  {...register("subject")}
+                  error={errors.subject?.message}
+                />
+                {errors.subject && (
+                  <FormError id="subject-error" message={errors.subject.message} />
+                )}
+              </FormField>
 
-              <textarea
-                name="message"
-                placeholder="Votre message"
-                required
-                rows={6}
-                className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              ></textarea>
-              {/* No field error display in Formspree version */}
+              <FormField>
+                <FormLabel htmlFor="message" required>
+                  Message
+                </FormLabel>
+                <Textarea
+                  id="message"
+                  placeholder="Votre message"
+                  rows={6}
+                  aria-describedby={errors.message ? "message-error" : undefined}
+                  {...register("message")}
+                  error={errors.message?.message}
+                />
+                {errors.message && (
+                  <FormError id="message-error" message={errors.message.message} />
+                )}
+              </FormField>
 
-              <SubmitButton pending={pending} />
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full"
+                disabled={isPending}
+                isLoading={isPending}
+              >
+                {isPending ? (
+                  "Envoi en cours..."
+                ) : (
+                  <>
+                    Envoyer le message
+                    <Send className="w-4 h-4" aria-hidden="true" />
+                  </>
+                )}
+              </Button>
             </form>
           </div>
         </motion.div>

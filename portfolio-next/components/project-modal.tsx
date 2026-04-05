@@ -3,9 +3,50 @@
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, ExternalLink, GitBranch, X } from "lucide-react";
-import { useEffect, useRef, useState, type WheelEvent } from "react";
+import { useEffect, useRef, useState, useCallback, type WheelEvent } from "react";
 import { createPortal } from "react-dom";
 import type { Project } from "@/types";
+
+// Focus trap utility
+function useFocusTrap(isActive: boolean) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isActive || !containerRef.current) return;
+
+    const container = containerRef.current;
+    const focusableElements = container.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    // Focus the first element when opened
+    firstElement?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    };
+
+    container.addEventListener("keydown", handleKeyDown);
+    return () => container.removeEventListener("keydown", handleKeyDown);
+  }, [isActive]);
+
+  return containerRef;
+}
 
 type ProjectModalProps = {
   project: Project | null;
@@ -16,6 +57,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [mounted, setMounted] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
   const modalScrollRef = useRef<HTMLDivElement | null>(null);
+  const focusTrapRef = useFocusTrap(!!project);
   const contextText =
     project?.context ??
     "Projet réalisé dans une logique de production réelle avec contraintes UX, performance et robustesse.";
@@ -35,11 +77,21 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
 
+    // Close on Escape key
+    const handleEscapeKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && activeImageIndex === null) {
+        onClose();
+      }
+    };
+    
+    window.addEventListener("keydown", handleEscapeKey);
+
     return () => {
       document.body.style.overflow = previousBodyOverflow;
       document.documentElement.style.overflow = previousHtmlOverflow;
+      window.removeEventListener("keydown", handleEscapeKey);
     };
-  }, [project]);
+  }, [project, activeImageIndex, onClose]);
 
   const handleModalWheelCapture = (event: WheelEvent<HTMLDivElement>) => {
     event.stopPropagation();
@@ -113,7 +165,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
   return createPortal(
     <AnimatePresence>
       {project && (
-        <>
+        <div ref={focusTrapRef}>
           <motion.button
             type="button"
             aria-label="Fermer le détail projet"
@@ -126,7 +178,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           <motion.div
             role="dialog"
             aria-modal="true"
-            aria-label={`Détails du projet ${project.title}`}
+            aria-labelledby="project-modal-title"
             className="fixed inset-x-4 top-6 z-[1300] mx-auto max-h-[88vh] max-w-5xl overflow-y-auto overscroll-y-contain rounded-2xl border border-slate-700/70 bg-slate-950 p-6 shadow-2xl"
             initial={{ opacity: 0, y: 40, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -141,7 +193,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
                   Mini Case Study
                 </p>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{project.title}</h3>
+                <h3 id="project-modal-title" className="text-2xl font-bold text-slate-900 dark:text-white">{project.title}</h3>
                 <p className="mt-2 text-slate-600 dark:text-slate-300">{project.description}</p>
               </div>
               <button
@@ -383,7 +435,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               </>
             )}
           </AnimatePresence>
-        </>
+        </div>
       )}
     </AnimatePresence>,
     document.body,
