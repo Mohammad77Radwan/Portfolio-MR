@@ -1,5 +1,33 @@
 # Mohammad Radwan – Portfolio-MR
 
+---
+
+## 🚩 Table of Contents | Table des matières
+
+- [Project Overview | Vue d’ensemble](#project-overview--vue-densemble)
+- [Badges & Status](#badges--status)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Folder Structure](#folder-structure)
+- [Setup & Usage](#setup--usage)
+- [API & Integrations](#api--integrations)
+- [DevOps & CI/CD](#devops--cicd)
+- [Testing & Quality](#testing--quality)
+- [Security & Compliance](#security--compliance)
+- [Accessibility](#accessibility)
+- [Performance & Analytics](#performance--analytics)
+- [Advanced Customization](#advanced-customization)
+- [Tech Radar](#tech-radar)
+- [Project Roadmap](#project-roadmap)
+- [Contributing Like a Pro](#contributing-like-a-pro)
+- [FAQ](#faq)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
+- [Contact](#contact)
+
+---
+
 [![Build](https://img.shields.io/github/actions/workflow/status/Mohammad77Radwan/Portfolio-MR/ci.yml?branch=main)](https://github.com/Mohammad77Radwan/Portfolio-MR/actions)
 [![License](https://img.shields.io/github/license/Mohammad77Radwan/Portfolio-MR)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16.2.2-blue)](https://nextjs.org/)
