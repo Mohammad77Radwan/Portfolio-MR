@@ -1,4 +1,10 @@
-import type { User } from '@prisma/client';
+
+// Simple User type for mock/demo purposes
+type User = {
+  id: string;
+  name: string;
+  email: string;
+};
 
 export async function requireAdminUser(): Promise<User> {
   // Placeholder: Simulate fetching an admin user
@@ -6,8 +12,7 @@ export async function requireAdminUser(): Promise<User> {
     id: 'admin-id',
     name: 'Admin',
     email: 'admin@example.com',
-    // ...add other required User fields as needed for your schema
-  } as User;
+  };
 }
 
 export async function requireAuthenticatedUser(): Promise<User> {
@@ -16,6 +21,5 @@ export async function requireAuthenticatedUser(): Promise<User> {
     id: 'user-id',
     name: 'User',
     email: 'user@example.com',
-    // ...add other required User fields as needed for your schema
-  } as User;
+  };
 }
