@@ -6,7 +6,7 @@ export { Projects } from "./projects";
 export { ProjectsBento } from "./projects-bento";
 export { Skills } from "./skills";
 export { Experience } from "./experience";
-export { Blog } from "./blog";
+// export { Blog } from "./blog";
 export { Contact } from "./contact";
 export { Testimonials } from "./testimonials";
 export { Stats } from "./stats";

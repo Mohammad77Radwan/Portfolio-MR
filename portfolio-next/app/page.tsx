@@ -4,7 +4,6 @@ import {
   ProjectsBento,
   Skills,
   Experience,
-  Blog,
   Testimonials,
   Contact,
   Stats,
@@ -23,7 +22,7 @@ export default function Home() {
       <Skills />
       <Experience />
       <Testimonials />
-      <Blog />
+        {/* Blog section removed for Netlify build stability */}
       <Suspense fallback={<GithubReposSkeleton />}>
         <GithubRepos />
       </Suspense>

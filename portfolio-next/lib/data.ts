@@ -408,38 +408,7 @@ export const experience: Experience[] = [
   },
 ];
 
-export const blogPosts: BlogPost[] = [
-  {
-    id: "ia-2026-prospective",
-    title: "IA en 2026 - Prospective et Impact sur les Métiers Tech",
-    excerpt: "Analyse des tendances IA pour 2026 et l'impact sur le développement web et les métiers numériques.",
-    category: "IA",
-    date: "2025-09-15T10:30:00",
-    readTime: 12,
-    featured: true,
-    link: "https://blogveilletech.netlify.app/blog/ia-en-2026"
-  },
-  {
-    id: "ia-weekly-nvidia",
-    title: "IA Weekly - Annonces NVIDIA, Amazon et OpenAI",
-    excerpt: "Synthèse des dernières annonces des géants de la tech et leurs implications pour le développement.",
-    category: "IA",
-    date: "2025-09-08T09:15:00",
-    readTime: 8,
-    featured: true,
-    link: "https://blogveilletech.netlify.app/blog/ia-weekly-nvidia-amazon-openai"
-  },
-  {
-    id: "souverainete-numerique",
-    title: "Souveraineté Numérique Française - Enjeux Stratégiques",
-    excerpt: "Analyse des infrastructures cloud souveraines, de la certification SecNumCloud, et de l'avenir de la tech européenne.",
-    category: "Technologie",
-    date: "2025-08-20T14:45:00",
-    readTime: 15,
-    featured: false,
-    link: "https://blogveilletech.netlify.app/blog/souverainete-numerique-francaise"
-  },
-];
+
 
 export const testimonials: Testimonial[] = [
   {

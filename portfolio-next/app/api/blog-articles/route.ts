@@ -47,3 +47,4 @@ export async function GET() {
     return NextResponse.json({ error: err.message || "Unknown error" }, { status: 500 });
   }
 }
+// Blog articles API removed for Netlify build stability
