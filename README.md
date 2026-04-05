@@ -92,6 +92,16 @@ Portfolio-MR/
   <img src="assets/architecture-diagram.svg" alt="Architecture Diagram" width="600"/>
 </p>
 
+### CI/CD Pipeline
+<p align="center">
+  <img src="assets/cicd-pipeline.svg" alt="CI/CD Pipeline Diagram" width="600"/>
+</p>
+
+### Data Flow
+<p align="center">
+  <img src="assets/data-flow.svg" alt="Data Flow Diagram" width="600"/>
+</p>
+
 ## ✨ Features
 - ⚡ **Lightning-fast**: Next.js 16 + Turbopack
 - 🎨 **Modern UI**: Tailwind, Framer Motion, Lucide
@@ -201,6 +211,16 @@ Portfolio-MR/
 ## 🖼️ Schéma d’Architecture
 <p align="center">
   <img src="assets/architecture-diagram.svg" alt="Schéma d’Architecture" width="600"/>
+</p>
+
+### Pipeline CI/CD
+<p align="center">
+  <img src="assets/cicd-pipeline.svg" alt="Schéma CI/CD" width="600"/>
+</p>
+
+### Flux de Données
+<p align="center">
+  <img src="assets/data-flow.svg" alt="Schéma Flux de Données" width="600"/>
 </p>
 
 ## ✨ Fonctionnalités
