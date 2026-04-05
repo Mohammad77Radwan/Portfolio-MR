@@ -1,16 +1,11 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
-import { useFormStatus } from "react-dom";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, Mail, GitBranch, MapPin } from "lucide-react";
-import {
-  initialContactState,
-  submitContactAction,
-} from "@/app/actions/contact";
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
+
+function SubmitButton({ pending }: { pending: boolean }) {
   return (
     <button
       type="submit"
@@ -23,14 +18,44 @@ function SubmitButton() {
   );
 }
 
-export function Contact() {
-  const [state, formAction] = useActionState(submitContactAction, initialContactState);
 
-  useEffect(() => {
-    if (!state.ok) return;
-    const form = document.getElementById("contact-form") as HTMLFormElement | null;
-    form?.reset();
-  }, [state.ok]);
+export function Contact() {
+  const [pending, setPending] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [ok, setOk] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setPending(true);
+    setMessage(null);
+    setOk(false);
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch("https://formspree.io/f/xqegyree", {
+        method: "POST",
+        body: data,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      if (res.ok) {
+        setOk(true);
+        setMessage("Merci ! Votre message a été envoyé.");
+        form.reset();
+      } else {
+        setOk(false);
+        setMessage("Erreur lors de l'envoi. Veuillez réessayer.");
+      }
+    } catch (err) {
+      setOk(false);
+      setMessage("Erreur lors de l'envoi. Veuillez réessayer.");
+    } finally {
+      setPending(false);
+    }
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -132,22 +157,22 @@ export function Contact() {
           <div className="relative rounded-[11px] bg-white dark:bg-slate-800 p-8">
             <h3 className="text-2xl font-bold mb-6">Envoyez-moi un message</h3>
 
-            {state.message && (
+            {message && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`mb-6 p-4 rounded-lg border ${
-                  state.ok
+                  ok
                     ? "bg-green-100 text-green-700 border-green-300 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700"
                     : "bg-red-100 text-red-700 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700"
                 }`}
               >
-                {state.ok ? "✓ " : "⚠ "}
-                {state.message}
+                {ok ? "✓ " : "⚠ "}
+                {message}
               </motion.div>
             )}
 
-            <form id="contact-form" action={formAction} className="space-y-6">
+            <form id="contact-form" onSubmit={handleSubmit} className="space-y-6">
               <input
                 type="text"
                 name="website"
@@ -164,9 +189,7 @@ export function Contact() {
                   required
                   className="px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                {state.fieldErrors?.name && (
-                  <p className="text-sm text-red-600 dark:text-red-400 -mt-4 md:col-span-2">{state.fieldErrors.name}</p>
-                )}
+                {/* No field error display in Formspree version */}
                 <input
                   type="email"
                   name="email"
@@ -174,9 +197,7 @@ export function Contact() {
                   required
                   className="px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                {state.fieldErrors?.email && (
-                  <p className="text-sm text-red-600 dark:text-red-400 -mt-4 md:col-span-2">{state.fieldErrors.email}</p>
-                )}
+                {/* No field error display in Formspree version */}
               </div>
 
               <input
@@ -186,9 +207,7 @@ export function Contact() {
                 required
                 className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              {state.fieldErrors?.subject && (
-                <p className="text-sm text-red-600 dark:text-red-400 -mt-4">{state.fieldErrors.subject}</p>
-              )}
+              {/* No field error display in Formspree version */}
 
               <textarea
                 name="message"
@@ -197,11 +216,9 @@ export function Contact() {
                 rows={6}
                 className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               ></textarea>
-              {state.fieldErrors?.message && (
-                <p className="text-sm text-red-600 dark:text-red-400 -mt-4">{state.fieldErrors.message}</p>
-              )}
+              {/* No field error display in Formspree version */}
 
-              <SubmitButton />
+              <SubmitButton pending={pending} />
             </form>
           </div>
         </motion.div>
@@ -209,3 +226,5 @@ export function Contact() {
     </section>
   );
 }
+
+export default Contact;
