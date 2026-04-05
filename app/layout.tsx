@@ -1,19 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import dynamic from "next/dynamic";
 import "./globals.css";
-import { CustomCursor } from "@/components";
+import { CustomCursor, CommandTerminal } from "@/components";
 import { NebulaBackdrop } from "@/components";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ReadingProgress } from "@/components/reading-progress";
 import { BackToTop } from "@/components/back-to-top";
-
-// Dynamic import for heavy components to improve initial load
-const CommandTerminal = dynamic(
-  () => import("@/components/command-terminal").then((mod) => mod.CommandTerminal),
-  { ssr: false }
-);
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
