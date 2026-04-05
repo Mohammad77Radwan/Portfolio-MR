@@ -1,4 +1,13 @@
 {
+  "name": "portfolio-mr",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix portfolio-next",
+    "build": "npm run build --prefix portfolio-next",
+    "start": "npm run start --prefix portfolio-next",
+    "lint": "npm run lint --prefix portfolio-next"
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-slot": "^1.2.4",
