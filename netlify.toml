@@ -1,23 +1,16 @@
-# Netlify configuration for Next.js 16 static export
-# https://docs.netlify.com/integrations/frameworks/next-js/
+# Netlify configuration for Next.js 16
+# Using @netlify/plugin-nextjs for full SSR support
 
 [build]
   command = "npm run build"
-  publish = "out"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "20"
-  NPM_FLAGS = "--legacy-peer-deps"
 
-# Required for Next.js static export
+# Next.js plugin handles all routing automatically
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-# Handle SPA routing for static export
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
 
 # Cache static assets
 [[headers]]
