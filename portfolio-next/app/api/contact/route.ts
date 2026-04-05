@@ -1,50 +1,69 @@
 import { NextRequest, NextResponse } from "next/server";
+import { contactFormSchema } from "@/lib/schemas";
+import { logEvent, logError } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, subject, message } = body;
 
-    // Validation
-    if (!name || !email || !subject || !message) {
+    // Validate with Zod schema
+    const result = contactFormSchema.safeParse(body);
+
+    if (!result.success) {
+      const fieldErrors = result.error.flatten().fieldErrors;
+
       return NextResponse.json(
-        { error: "Missing required fields" },
+        {
+          success: false,
+          error: "Validation échouée",
+          details: fieldErrors,
+        },
         { status: 400 }
       );
     }
 
-    // Here you would typically send the email or save to database
-    // For now, we'll just log it and return success
-    console.log("Contact form submission:", {
+    const { name, email, subject, message } = result.data;
+
+    // Log for production monitoring
+    logEvent("contact_form_submission", {
       name,
       email,
       subject,
-      message,
-      timestamp: new Date().toISOString(),
+      messageLength: message.length,
     });
 
     // TODO: Integrate with email service (e.g., Resend, SendGrid, Mailgun)
-    // const response = await resend.emails.send({
-    //   from: "noreply@example.com",
+    // Example with Resend:
+    // const resend = new Resend(process.env.RESEND_API_KEY);
+    // await resend.emails.send({
+    //   from: "Portfolio <noreply@radwan-portfolio.vercel.app>",
     //   to: "mohammadradwn804@gmail.com",
-    //   subject: `New contact form submission: ${subject}`,
+    //   replyTo: email,
+    //   subject: `[Portfolio Contact] ${subject}`,
     //   html: `
-    //     <h2>New message from ${name}</h2>
+    //     <h2>Nouveau message de ${name}</h2>
     //     <p><strong>Email:</strong> ${email}</p>
-    //     <p><strong>Subject:</strong> ${subject}</p>
+    //     <p><strong>Sujet:</strong> ${subject}</p>
     //     <p><strong>Message:</strong></p>
-    //     <p>${message}</p>
+    //     <p>${message.replace(/\n/g, '<br>')}</p>
     //   `,
     // });
 
     return NextResponse.json(
-      { success: true, message: "Email sent successfully" },
+      {
+        success: true,
+        message: "Message envoyé avec succès",
+      },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Contact form error:", error);
+    logError("contact_api", error);
+
     return NextResponse.json(
-      { error: "Failed to process request" },
+      {
+        success: false,
+        error: "Erreur serveur. Veuillez réessayer plus tard.",
+      },
       { status: 500 }
     );
   }

@@ -1,8 +1,9 @@
 "use client";
 
+import { memo, useMemo } from "react";
 import { motion } from "framer-motion";
 import { skills, formations, languages } from "@/lib/data";
-import { Skill } from "@/types";
+import type { Skill, SkillItem } from "@/types";
 
 const categoryImpact: Record<string, string> = {
   "Langages":
@@ -36,7 +37,11 @@ function radarPoints(values: number[], radius: number, center: number) {
     .join(" ");
 }
 
-function SkillCard({ skill }: { skill: Skill["skills"][0] }) {
+interface SkillCardProps {
+  skill: SkillItem;
+}
+
+const SkillCard = memo(function SkillCard({ skill }: SkillCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -61,7 +66,7 @@ function SkillCard({ skill }: { skill: Skill["skills"][0] }) {
           viewport={{ once: true }}
           transition={{ duration: 1.5, delay: 0.2, ease: "easeOut" }}
           className="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-fuchsia-500"
-        ></motion.div>
+        />
         <motion.div
           aria-hidden="true"
           className="absolute top-0 h-full w-20 bg-gradient-to-r from-transparent via-white/50 to-transparent"
@@ -73,32 +78,43 @@ function SkillCard({ skill }: { skill: Skill["skills"][0] }) {
       </div>
     </motion.div>
   );
-}
+});
+
+SkillCard.displayName = "SkillCard";
 
 export function Skills() {
-  const languageContext: Record<string, string> = {
-    "C2": "Communication professionnelle avancée",
-    "C1": "Excellente aisance écrite et orale",
-    Natif: "Langue maternelle",
-  };
+  const languageContext = useMemo<Record<string, string>>(
+    () => ({
+      C2: "Communication professionnelle avancée",
+      C1: "Excellente aisance écrite et orale",
+      Natif: "Langue maternelle",
+    }),
+    []
+  );
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
+  const containerVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: 0.1,
+        },
       },
-    },
-  };
+    }),
+    []
+  );
 
-  const categoryVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-    },
-  };
+  const categoryVariants = useMemo(
+    () => ({
+      hidden: { opacity: 0, y: 20 },
+      visible: {
+        opacity: 1,
+        y: 0,
+      },
+    }),
+    []
+  );
 
   return (
     <section id="skills" className="relative overflow-hidden py-24 px-4">

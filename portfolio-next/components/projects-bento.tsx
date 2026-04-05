@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useMotionTemplate, useMotionValue, useTransform } from "framer-motion";
-import { useMemo, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { projects } from "@/lib/data";
 import type { Project } from "@/types";
 import { ProjectModal } from "./project-modal";
@@ -10,7 +10,14 @@ import { ProjectModal } from "./project-modal";
 const BLUR =
   "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PScxMic+PHJlY3Qgd2lkdGg9JzE2JyBoZWlnaHQ9JzEyJyBmaWxsPScjMTQyMjM3Jy8+PC9zdmc+";
 
-function TiltCard({ project, onOpen, featured = false, index = 0 }: { project: Project; onOpen: (p: Project) => void; featured?: boolean; index?: number }) {
+interface TiltCardProps {
+  project: Project;
+  onOpen: (project: Project) => void;
+  featured?: boolean;
+  index?: number;
+}
+
+const TiltCard = memo(function TiltCard({ project, onOpen, featured = false, index = 0 }: TiltCardProps) {
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const pointerX = useMotionValue(120);
@@ -116,7 +123,9 @@ function TiltCard({ project, onOpen, featured = false, index = 0 }: { project: P
       </div>
     </motion.button>
   );
-}
+});
+
+TiltCard.displayName = "TiltCard";
 
 export function ProjectsBento() {
   const [query, setQuery] = useState("");
@@ -138,16 +147,28 @@ export function ProjectsBento() {
     return category.toUpperCase();
   };
 
-  const filtered = projects.filter((project) => {
-    const categoryMatch =
-      activeCategory === "all" ||
-      project.category === activeCategory ||
-      (project.categories ?? []).includes(activeCategory);
-    const queryMatch = `${project.title} ${project.description}`.toLowerCase().includes(query.toLowerCase());
-    return categoryMatch && queryMatch;
-  });
+  const filtered = useMemo(() => {
+    return projects.filter((project) => {
+      const categoryMatch =
+        activeCategory === "all" ||
+        project.category === activeCategory ||
+        (project.categories ?? []).includes(activeCategory);
+      const queryMatch = `${project.title} ${project.description}`
+        .toLowerCase()
+        .includes(query.toLowerCase());
+      return categoryMatch && queryMatch;
+    });
+  }, [activeCategory, query]);
 
   const [first, ...rest] = filtered;
+
+  const handleOpenProject = useCallback((project: Project) => {
+    setSelected(project);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelected(null);
+  }, []);
 
   return (
     <section id="projects" className="relative isolate px-4 py-24">
@@ -193,16 +214,16 @@ export function ProjectsBento() {
             </p>
           ) : (
             <div className="grid grid-cols-1 gap-5 md:grid-cols-4 md:auto-rows-[220px]">
-              {first && <TiltCard project={first} onOpen={setSelected} featured index={0} />}
+              {first && <TiltCard project={first} onOpen={handleOpenProject} featured index={0} />}
               {rest.map((project, index) => (
-                <TiltCard key={project.id} project={project} onOpen={setSelected} index={index + 1} />
+                <TiltCard key={project.id} project={project} onOpen={handleOpenProject} index={index + 1} />
               ))}
             </div>
           )}
         </div>
       </div>
 
-      <ProjectModal project={selected} onClose={() => setSelected(null)} />
+      <ProjectModal project={selected} onClose={handleCloseModal} />
     </section>
   );
 }

@@ -2,8 +2,35 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, Mail, GitBranch, MapPin } from "lucide-react";
+import { Send, Mail, GitBranch, MapPin, AlertCircle } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { contactFormSchema, type ContactFormData } from "@/lib/schemas";
+import { cn } from "@/lib/utils";
 
+interface FormFieldProps {
+  error?: string;
+  children: React.ReactNode;
+}
+
+function FormField({ error, children }: FormFieldProps) {
+  return (
+    <div className="space-y-1">
+      {children}
+      {error && (
+        <motion.p
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-1 text-sm text-red-500 dark:text-red-400"
+          role="alert"
+        >
+          <AlertCircle className="w-3 h-3" aria-hidden="true" />
+          {error}
+        </motion.p>
+      )}
+    </div>
+  );
+}
 
 function SubmitButton({ pending }: { pending: boolean }) {
   return (
@@ -13,49 +40,57 @@ function SubmitButton({ pending }: { pending: boolean }) {
       className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
     >
       {pending ? "Envoi en cours..." : "Envoyer le message"}
-      {!pending && <Send className="w-4 h-4" />}
+      {!pending && <Send className="w-4 h-4" aria-hidden="true" />}
     </button>
   );
 }
 
-
 export function Contact() {
-  const [pending, setPending] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const [ok, setOk] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setPending(true);
-    setMessage(null);
-    setOk(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+    mode: "onBlur",
+  });
 
-    const form = e.currentTarget;
-    const data = new FormData(form);
+  const onSubmit = async (data: ContactFormData) => {
+    setSubmitMessage(null);
+    setSubmitSuccess(false);
 
     try {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("email", data.email);
+      formData.append("subject", data.subject);
+      formData.append("message", data.message);
+
       const res = await fetch("https://formspree.io/f/xqegyree", {
         method: "POST",
-        body: data,
+        body: formData,
         headers: {
           Accept: "application/json",
         },
       });
+
       if (res.ok) {
-        setOk(true);
-        setMessage("Merci ! Votre message a été envoyé.");
-        form.reset();
+        setSubmitSuccess(true);
+        setSubmitMessage("Merci ! Votre message a été envoyé.");
+        reset();
       } else {
-        setOk(false);
-        setMessage("Erreur lors de l'envoi. Veuillez réessayer.");
+        setSubmitSuccess(false);
+        setSubmitMessage("Erreur lors de l'envoi. Veuillez réessayer.");
       }
-    } catch (err) {
-      setOk(false);
-      setMessage("Erreur lors de l'envoi. Veuillez réessayer.");
-    } finally {
-      setPending(false);
+    } catch {
+      setSubmitSuccess(false);
+      setSubmitMessage("Erreur lors de l'envoi. Veuillez réessayer.");
     }
-  }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -69,6 +104,14 @@ export function Contact() {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
+
+  const inputClasses = (hasError: boolean) =>
+    cn(
+      "px-4 py-3 rounded-lg border bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 transition-colors",
+      hasError
+        ? "border-red-500 dark:border-red-400 focus:ring-red-500"
+        : "border-slate-300 dark:border-slate-700 focus:ring-blue-500"
+    );
 
   return (
     <section id="contact" className="relative py-20 px-4">
@@ -99,7 +142,7 @@ export function Contact() {
             className="bg-white dark:bg-slate-800 rounded-lg p-6 text-center"
           >
             <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-              <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <Mail className="w-6 h-6 text-blue-600 dark:text-blue-400" aria-hidden="true" />
             </div>
             <h3 className="font-bold mb-2">Email</h3>
             <a
@@ -115,7 +158,7 @@ export function Contact() {
             className="bg-white dark:bg-slate-800 rounded-lg p-6 text-center"
           >
             <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-              <MapPin className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              <MapPin className="w-6 h-6 text-purple-600 dark:text-purple-400" aria-hidden="true" />
             </div>
             <h3 className="font-bold mb-2">Localisation</h3>
             <p className="text-slate-600 dark:text-slate-400 text-sm">
@@ -128,7 +171,7 @@ export function Contact() {
             className="bg-white dark:bg-slate-800 rounded-lg p-6 text-center"
           >
             <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center">
-              <GitBranch className="w-6 h-6 text-pink-600 dark:text-pink-400" />
+              <GitBranch className="w-6 h-6 text-pink-600 dark:text-pink-400" aria-hidden="true" />
             </div>
             <h3 className="font-bold mb-2">GitHub</h3>
             <a
@@ -157,22 +200,31 @@ export function Contact() {
           <div className="relative rounded-[11px] bg-white dark:bg-slate-800 p-8">
             <h3 className="text-2xl font-bold mb-6">Envoyez-moi un message</h3>
 
-            {message && (
+            {submitMessage && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`mb-6 p-4 rounded-lg border ${
-                  ok
+                role="alert"
+                aria-live="polite"
+                className={cn(
+                  "mb-6 p-4 rounded-lg border",
+                  submitSuccess
                     ? "bg-green-100 text-green-700 border-green-300 dark:bg-green-900/30 dark:text-green-300 dark:border-green-700"
                     : "bg-red-100 text-red-700 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700"
-                }`}
+                )}
               >
-                {ok ? "✓ " : "⚠ "}
-                {message}
+                {submitSuccess ? "✓ " : "⚠ "}
+                {submitMessage}
               </motion.div>
             )}
 
-            <form id="contact-form" onSubmit={handleSubmit} className="space-y-6">
+            <form
+              id="contact-form"
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-6"
+              noValidate
+            >
+              {/* Honeypot field for spam protection */}
               <input
                 type="text"
                 name="website"
@@ -181,44 +233,70 @@ export function Contact() {
                 className="hidden"
                 aria-hidden="true"
               />
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Votre nom"
-                  required
-                  className="px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {/* No field error display in Formspree version */}
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Votre email"
-                  required
-                  className="px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                {/* No field error display in Formspree version */}
+                <FormField error={errors.name?.message}>
+                  <label htmlFor="name" className="sr-only">
+                    Votre nom
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    placeholder="Votre nom"
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? "name-error" : undefined}
+                    className={inputClasses(!!errors.name)}
+                    {...register("name")}
+                  />
+                </FormField>
+
+                <FormField error={errors.email?.message}>
+                  <label htmlFor="email" className="sr-only">
+                    Votre email
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    placeholder="Votre email"
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? "email-error" : undefined}
+                    className={inputClasses(!!errors.email)}
+                    {...register("email")}
+                  />
+                </FormField>
               </div>
 
-              <input
-                type="text"
-                name="subject"
-                placeholder="Sujet"
-                required
-                className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {/* No field error display in Formspree version */}
+              <FormField error={errors.subject?.message}>
+                <label htmlFor="subject" className="sr-only">
+                  Sujet
+                </label>
+                <input
+                  id="subject"
+                  type="text"
+                  placeholder="Sujet"
+                  aria-invalid={!!errors.subject}
+                  aria-describedby={errors.subject ? "subject-error" : undefined}
+                  className={cn(inputClasses(!!errors.subject), "w-full")}
+                  {...register("subject")}
+                />
+              </FormField>
 
-              <textarea
-                name="message"
-                placeholder="Votre message"
-                required
-                rows={6}
-                className="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              ></textarea>
-              {/* No field error display in Formspree version */}
+              <FormField error={errors.message?.message}>
+                <label htmlFor="message" className="sr-only">
+                  Votre message
+                </label>
+                <textarea
+                  id="message"
+                  placeholder="Votre message"
+                  rows={6}
+                  aria-invalid={!!errors.message}
+                  aria-describedby={errors.message ? "message-error" : undefined}
+                  className={cn(inputClasses(!!errors.message), "w-full resize-none")}
+                  {...register("message")}
+                />
+              </FormField>
 
-              <SubmitButton pending={pending} />
+              <SubmitButton pending={isSubmitting} />
             </form>
           </div>
         </motion.div>
