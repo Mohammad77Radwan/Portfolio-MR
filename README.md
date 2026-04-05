@@ -60,30 +60,9 @@ Portfolio-MR/
 ```
 
 ## 🖼️ Architecture Diagram
-```mermaid
-flowchart TD
-    subgraph WebApp [Portfolio Frontend]
-      A[Next.js 16 (App Router)]
-      B[React 19]
-      C[Tailwind CSS]
-      D[Framer Motion]
-      E[Lucide Icons]
-      F[Custom API Routes]
-      G[Blog Integration]
-    end
-    subgraph GitHub [Blog-Veille-Tech Repo]
-      H[MDX Articles]
-      I[GitHub API]
-    end
-    A --> B
-    B --> C
-    B --> D
-    B --> E
-    A --> F
-    F --> G
-    G --> I
-    I --> H
-```
+<p align="center">
+  <img src="assets/architecture-diagram.svg" alt="Architecture Diagram" width="600"/>
+</p>
 
 ## ✨ Features
 - ⚡ **Lightning-fast**: Next.js 16 + Turbopack
@@ -192,30 +171,9 @@ Portfolio-MR/
 ```
 
 ## 🖼️ Schéma d’Architecture
-```mermaid
-flowchart TD
-    subgraph WebApp [Portfolio Frontend]
-      A[Next.js 16 (App Router)]
-      B[React 19]
-      C[Tailwind CSS]
-      D[Framer Motion]
-      E[Lucide Icons]
-      F[Custom API Routes]
-      G[Blog Integration]
-    end
-    subgraph GitHub [Blog-Veille-Tech Repo]
-      H[MDX Articles]
-      I[GitHub API]
-    end
-    A --> B
-    B --> C
-    B --> D
-    B --> E
-    A --> F
-    F --> G
-    G --> I
-    I --> H
-```
+<p align="center">
+  <img src="assets/architecture-diagram.svg" alt="Schéma d’Architecture" width="600"/>
+</p>
 
 ## ✨ Fonctionnalités
 - ⚡ **Ultra-rapide** : Next.js 16 + Turbopack
