@@ -9,3 +9,13 @@ export async function requireAdminUser(): Promise<User> {
     // ...add other required User fields as needed for your schema
   } as User;
 }
+
+export async function requireAuthenticatedUser() {
+  // Placeholder: Simulate fetching an authenticated user
+  return {
+    id: 'user-id',
+    name: 'User',
+    email: 'user@example.com',
+    // ...add other required User fields as needed for your schema
+  } as any;
+}
