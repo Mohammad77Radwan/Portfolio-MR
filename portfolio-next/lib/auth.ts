@@ -10,12 +10,12 @@ export async function requireAdminUser(): Promise<User> {
   } as User;
 }
 
-export async function requireAuthenticatedUser() {
+export async function requireAuthenticatedUser(): Promise<User> {
   // Placeholder: Simulate fetching an authenticated user
   return {
     id: 'user-id',
     name: 'User',
     email: 'user@example.com',
     // ...add other required User fields as needed for your schema
-  } as any;
+  } as User;
 }
