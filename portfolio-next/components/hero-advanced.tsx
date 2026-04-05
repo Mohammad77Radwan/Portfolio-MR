@@ -171,7 +171,7 @@ export function HeroAdvanced() {
               Me contacter
             </MagneticButton>
             <a
-              href="/documents/cv-mohammad-radwan.txt"
+              href="/documents/Mohammad_Radwan_CV.pdf"
               download
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-cyan-300/40 bg-cyan-400/10 px-8 py-4 font-semibold text-cyan-200 transition-all hover:bg-cyan-400/20 hover:shadow-lg hover:shadow-cyan-500/30"
             >
