@@ -171,6 +171,49 @@ export const projects: Project[] = [
       { name: "PostgreSQL" },
     ],
   },
+  {
+    id: "blog-veille-tech",
+    title: "Blog Veille Tech",
+    description: "Blog technique sur l'IA, la souveraineté numérique et les tendances tech.",
+    context:
+      "Blog personnel pour partager des analyses, articles et veille sur l'IA, le développement web, et l'impact des technologies.",
+    problem:
+      "Rendre accessible la veille technologique et les analyses stratégiques sur l'IA et le numérique.",
+    longDescription:
+      "Blog Next.js avec articles sur l'IA, la souveraineté numérique, et les tendances tech. Articles originaux, analyses de fond, et veille continue. Exemples : 'IA en 2026', 'Souveraineté numérique française', 'Nvidia, Amazon, OpenAI: la semaine IA'.",
+    image: "/projects/screenshots/Screenshot 2026-04-05 071000.png", // First screenshot as main image
+    tags: ["Blog", "Next.js", "IA", "Veille"],
+    category: "fullstack",
+    categories: ["blog", "veille"],
+    screenshots: [
+      "/projects/screenshots/Screenshot 2026-04-05 071000.png",
+      "/projects/screenshots/Screenshot 2026-04-05 071112.png",
+      "/projects/screenshots/Screenshot 2026-04-05 071157.png",
+      "/projects/screenshots/Screenshot 2026-04-05 071216.png",
+      "/projects/screenshots/Screenshot 2026-04-05 071340.png",
+      "/projects/screenshots/Screenshot 2026-04-05 071526.png"
+    ],
+    btsBlocks: ["Bloc 2", "Bloc 3"],
+    btsCompetences: [
+      "Assurer la cybersécurité d'une solution applicative",
+      "Concevoir et développer une solution applicative"
+    ],
+    link: "https://blogveilletech.netlify.app/",
+    github: "https://github.com/Mohammad77Radwan/Blog-Veille-Tech",
+    date: "2026",
+    featured: false,
+    stats: [
+      { label: "Articles", value: "3+" },
+      { label: "Catégories", value: "IA, Souveraineté, Tendances" }
+    ],
+    technologies: [
+      { name: "Next.js" },
+      { name: "TypeScript" },
+      { name: "Tailwind CSS" },
+      { name: "Prisma" },
+      { name: "Supabase" }
+    ],
+  },
 ];
 
 export const skills: Skill[] = [
@@ -201,6 +244,16 @@ export const skills: Skill[] = [
       { name: "Alpine.js", level: 80, icon: "alpine" },
       { name: "Firebase Auth", level: 86, icon: "firebase" },
       { name: "Framer Motion", level: 85, icon: "framer" },
+      { name: "Prisma", level: 82, icon: "prisma" },
+      { name: "Clerk", level: 80, icon: "clerk" },
+      { name: "Radix UI", level: 80, icon: "radix" },
+      { name: "Zod", level: 78, icon: "zod" },
+      { name: "React Markdown", level: 80, icon: "markdown" },
+      { name: "Recharts", level: 75, icon: "recharts" },
+      { name: "Tailwind Typography", level: 77, icon: "tailwind" },
+      { name: "Tailwind Merge", level: 77, icon: "tailwind" },
+      { name: "Sonner", level: 75, icon: "sonner" },
+      { name: "Gray-matter", level: 74, icon: "graymatter" },
     ],
   },
   {
@@ -217,6 +270,7 @@ export const skills: Skill[] = [
       { name: "PostgreSQL", level: 82, icon: "postgres" },
       { name: "Vercel", level: 91, icon: "vercel" },
       { name: "Supabase", level: 85, icon: "supabase" },
+      { name: "@supabase/ssr", level: 75, icon: "supabase" },
     ],
   },
   {
@@ -358,35 +412,32 @@ export const blogPosts: BlogPost[] = [
   {
     id: "ia-2026-prospective",
     title: "IA en 2026 - Prospective et Impact sur les Métiers Tech",
-    excerpt:
-      "Analyse des tendances IA pour 2026 et l'impact sur le développement web et les métiers numériques.",
-    content: `L'intelligences artificielle continue de transformer le secteur du développement web...`,
+    excerpt: "Analyse des tendances IA pour 2026 et l'impact sur le développement web et les métiers numériques.",
     category: "IA",
     date: "2025-09-15T10:30:00",
     readTime: 12,
     featured: true,
+    link: "https://blogveilletech.netlify.app/blog/ia-en-2026"
   },
   {
     id: "ia-weekly-nvidia",
     title: "IA Weekly - Annonces NVIDIA, Amazon et OpenAI",
-    excerpt:
-      "Synthèse des dernières annonces des géants de la tech et leurs implications pour le développement.",
-    content: `Cette semaine, les annonces des trois géants ont marqué l'actualité...`,
+    excerpt: "Synthèse des dernières annonces des géants de la tech et leurs implications pour le développement.",
     category: "IA",
     date: "2025-09-08T09:15:00",
     readTime: 8,
     featured: true,
+    link: "https://blogveilletech.netlify.app/blog/ia-weekly-nvidia-amazon-openai"
   },
   {
     id: "souverainete-numerique",
     title: "Souveraineté Numérique Française - Enjeux Stratégiques",
-    excerpt:
-      "Exploration des enjeux de souveraineté numérique française et les initiatives gouvernementales.",
-    content: `La souveraineté numérique est devenue un sujet central pour le gouvernement français...`,
+    excerpt: "Analyse des infrastructures cloud souveraines, de la certification SecNumCloud, et de l'avenir de la tech européenne.",
     category: "Technologie",
     date: "2025-08-20T14:45:00",
     readTime: 15,
     featured: false,
+    link: "https://blogveilletech.netlify.app/blog/souverainete-numerique-francaise"
   },
 ];
 
