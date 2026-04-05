@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { CustomCursor, CommandTerminal } from "@/components";
-import { NebulaBackdrop } from "@/components";
+import { CustomCursor, CommandTerminal, NebulaBackdrop } from "@/components";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { ReadingProgress } from "@/components/reading-progress";
