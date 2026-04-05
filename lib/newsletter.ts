@@ -1,9 +1,18 @@
-export function notifySubscribersOfNewPost(post: any) {
-  // Placeholder: Implement your notification logic here
-  console.log("Notify subscribers of new post:", post);
+interface Post {
+  id: string;
+  title: string;
+  slug: string;
 }
 
-export function sendWelcomeSubscriberEmail(email: string, unsubscribeToken: string) {
+export function notifySubscribersOfNewPost(post: Post): void {
+  // Placeholder: Implement your notification logic here
+  // In production, this would send emails to subscribers
+  void post;
+}
+
+export function sendWelcomeSubscriberEmail(email: string, unsubscribeToken: string): void {
   // Placeholder: Implement your welcome email logic here
-  console.log("Send welcome email to:", email, "with token:", unsubscribeToken);
+  // In production, this would send a welcome email via Resend/SendGrid
+  void email;
+  void unsubscribeToken;
 }

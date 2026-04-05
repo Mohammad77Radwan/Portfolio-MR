@@ -38,9 +38,6 @@ export function Newsletter() {
       // Simulate API latency
       await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // Log for development
-      console.log("[Newsletter] Subscription:", data.email);
-
       setSubscribed(true);
       reset();
 

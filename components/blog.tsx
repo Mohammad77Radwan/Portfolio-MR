@@ -2,16 +2,31 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { ArrowRight, Sparkles, Lightbulb, Rocket, Lock, Globe } from "lucide-react";
+import { ArrowRight, Sparkles, Lightbulb, Rocket, Lock, Globe, type LucideIcon } from "lucide-react";
+
+interface TechTip {
+  icon: LucideIcon;
+  text: string;
+}
+
+interface BlogArticle {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  url: string;
+}
+
 // Fun tech tips for engagement
-const TECH_TIPS = [
+const TECH_TIPS: TechTip[] = [
   {
     icon: Lightbulb,
     text: "Astuce : Utilisez Ctrl+Shift+P pour tout faire dans VS Code !",
   },
   {
     icon: Rocket,
-    text: "Conseil : L’IA peut booster votre veille technologique.",
+    text: "Conseil : L'IA peut booster votre veille technologique.",
   },
   {
     icon: Sparkles,
@@ -27,20 +42,10 @@ const TECH_TIPS = [
   },
 ];
 
-
-
-function formatTime(dateString: string) {
-  return new Date(dateString).toLocaleTimeString("fr-FR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-
 export function Blog() {
-  const [articles, setArticles] = useState<any[]>([]);
+  const [articles, setArticles] = useState<BlogArticle[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tips, setTips] = useState<{icon: any, text: string}[]>([]);
+  const [tips, setTips] = useState<TechTip[]>([]);
 
   useEffect(() => {
     fetch("/api/blog-articles")
@@ -80,7 +85,7 @@ export function Blog() {
 
   // For compatibility, treat all as featured for now
   const featured = articles;
-  const others: any[] = [];
+  const others: BlogArticle[] = [];
 
   if (loading) {
     return (

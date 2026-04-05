@@ -18,7 +18,7 @@ export function Navbar() {
 
   return (
     <nav
-      className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md"
+      className="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md"
       role="navigation"
       aria-label="Navigation principale"
     >
@@ -72,7 +72,7 @@ export function Navbar() {
         {isOpen && (
           <div
             id="mobile-navigation"
-            className="md:hidden border-t border-slate-200 dark:border-slate-800 py-4 space-y-2"
+            className="md:hidden border-t border-slate-200 dark:border-white/10 py-4 space-y-2"
           >
             {navItems.map((item) => (
               <Link

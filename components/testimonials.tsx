@@ -24,7 +24,7 @@ export function Testimonials() {
   };
 
   return (
-    <section className="relative py-20 px-4">
+    <section id="testimonials" className="relative py-20 px-4">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -32,7 +32,7 @@ export function Testimonials() {
           transition={{ duration: 0.8 }}
           className="mb-12 text-center"
         >
-          <h2 className="text-4xl font-bold mb-4">Avis et Recommandations</h2>
+          <h2 className="text-4xl font-bold mb-4 text-slate-900 dark:text-slate-50">Avis et Recommandations</h2>
           <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
             Ce que mes collègues et professeurs pensent de mon travail et de mes
             compétences.
@@ -50,7 +50,7 @@ export function Testimonials() {
             <motion.div
               key={testimonial.id}
               variants={itemVariants}
-              className="bg-white dark:bg-slate-800 rounded-lg p-8 shadow-sm hover:shadow-lg transition-all duration-300"
+              className="bg-white dark:bg-slate-900/50 rounded-xl p-8 shadow-sm hover:shadow-lg transition-all duration-300 border border-slate-200 dark:border-white/10"
             >
               {/* Stars */}
               <div className="mb-4 flex items-center justify-between">
@@ -75,7 +75,7 @@ export function Testimonials() {
               </p>
 
               {/* Author */}
-              <div className="flex items-center gap-4 pt-6 border-t border-slate-200 dark:border-slate-700">
+              <div className="flex items-center gap-4 pt-6 border-t border-slate-200 dark:border-white/10">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
                   {testimonial.name.charAt(0)}
                 </div>
