@@ -54,12 +54,13 @@ export interface BlogPost {
   id: string;
   title: string;
   excerpt: string;
-  content: string;
+  content?: string;
   category: string;
   date: string;
   readTime: number;
   image?: string;
   featured: boolean;
+  link?: string;
 }
 
 export interface Testimonial {
