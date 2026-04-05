@@ -9,6 +9,7 @@ import {
   Stats,
   Newsletter,
   E5Documents,
+  Articles,
 } from "@/components";
 import { GithubRepos } from "@/components/github-repos";
 import { GithubReposSkeleton } from "@/components/github-repos-skeleton";
@@ -94,6 +95,11 @@ export default function Home() {
       {/* Testimonials section */}
       <WithErrorBoundary sectionName="Témoignages">
         <Testimonials />
+      </WithErrorBoundary>
+
+      {/* Articles / Blog section */}
+      <WithErrorBoundary sectionName="Articles">
+        <Articles />
       </WithErrorBoundary>
 
       {/* GitHub repos with Suspense and error boundary */}
