@@ -1,4 +1,4 @@
-export function notifySubscribersOfNewPost(post) {
+export function notifySubscribersOfNewPost(post: any) {
   // Placeholder: Implement your notification logic here
   console.log("Notify subscribers of new post:", post);
 }
